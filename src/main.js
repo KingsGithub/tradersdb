@@ -7,6 +7,7 @@ import {store} from './store/index'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
+import {firebaseConfig} from 'firebaseConfig'
 
 Vue.use(Vuetify, {
   theme: {
@@ -30,12 +31,6 @@ new Vue({
   store,
   render: h => h(App),
   created(){
-    firebase.initializeApp({
-        apiKey: 'AIzaSyAEBqcPNeZ5k2iFzzNwNjpdH8G7lKiiORo',
-        authDomain: 'vueresourcescourse.firebaseapp.com',
-        databaseURL: 'https://vueresourcescourse.firebaseio.com',
-        projectId: 'vueresourcescourse',
-        storageBucket: 'vueresourcescourse.appspot.com'
-    });
+    firebase.initializeApp(firebaseConfig);
   }
 })
