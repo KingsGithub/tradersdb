@@ -94,7 +94,7 @@ export const traderModule = {
             commit('setLoading',null,{root:true});
               firebase.database().ref('/traders/'+ trader.id).update(trader)
               .then ( function(result) {
-                  commit('updateTrader',trader);
+                  commit('updateTrader',trader); //comment
                   commit('clearLoading',null,{root:true});
                 })
               .catch( function(error) {

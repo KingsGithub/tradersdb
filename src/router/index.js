@@ -14,7 +14,7 @@ import Signin from '@/components/users/signin'
 import Logout from '@/components/users/logout'
 import { store } from '../store'
 
-Vue.use(Router)
+Vue.use(Router) //dfsd
 
 export default new Router({
   routes: [

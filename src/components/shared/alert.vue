@@ -20,7 +20,7 @@
     },
     computed:{
         setSnackBar(){
-            return this.snackbar
+            return this.snackbar //again
         }
     }
   }

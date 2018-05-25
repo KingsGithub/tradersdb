@@ -64,7 +64,7 @@ import Trader from './trader';
         this.$router.push('/traders/trader/'+editTrader.id )
       },
       createNew(){
-        this.$router.push('/traders/trader/0');
+        this.$router.push('/traders/trader/0'); //testing git
       }
     },
     data () {

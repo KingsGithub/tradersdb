@@ -90,7 +90,7 @@ export default {
         return this.confirmPassword === this.password ? true:"Passwords do not match";
       },
       userId(){
-        return this.$store.getters.userId;
+        return this.$store.getters.userId; //yup
       }
     },
     watch: {

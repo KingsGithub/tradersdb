@@ -82,7 +82,7 @@ export default {
         if(errormessage !== 'OK') {
             this.loginError = errormessage; this.snackbar = true;
             return errormessage;
-        } else return 'OK'
+        } else return 'OK' //OK
       },
        userId(){
         return this.$store.getters.userId;

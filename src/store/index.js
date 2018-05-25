@@ -59,7 +59,7 @@ export const store = new Vuex.Store({
               .then( result => {
                 commit('setLoading',false);
                 firebase.auth().onAuthStateChanged( user => {
-                  if(user)
+                  if(user) //comment
                   commit('setUser', { id: user.uid, accessToken:user.refreshToken , permissions: []});
                 })
               }).catch( error => {
