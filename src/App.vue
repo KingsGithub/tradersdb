@@ -49,6 +49,10 @@
     </v-toolbar>
     <v-content>
       <v-spacer></v-spacer>
+     <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
+            {{ snackbartext }}
+            <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
+        </v-snackbar>
       <router-view/>
     </v-content>
 
@@ -69,7 +73,16 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'TradersDB'
+      title: 'TradersDB',
+
+      snackbar: false,
+      snackbartext:'',
+      timeoutt:2500,
+      yposition:true,
+      message:"Confirm Close",
+      showDialog: false
+
+
     }
   },
   computed:{
@@ -98,6 +111,10 @@ export default {
   },
   name: 'App',
   methods:{
+    showSnackBar(text){
+          this.snackbartext = text;
+          this.snackbar = true;
+    },
     showTooltip(item){
       console.log(item);
       event.target.innerHtml = item.tooltip;

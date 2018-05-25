@@ -12,19 +12,29 @@ import User from '@/components/users/user'
 import Signup from '@/components/users/signup'
 import Signin from '@/components/users/signin'
 import Logout from '@/components/users/logout'
+import { store } from '../store'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     { path: '/', name: 'Home', component: Home },
-    { path: '/traders/traders', name: 'Traders', component: Traders },
-    { path: '/traders/trader', name: 'Trader', component: Trader, props:true },
-    { path: '/payments/payment', name: 'Payments', component: Payment },
-    { path: '/property/units/unit', name: 'Unit', component: Unit },
-    { path: '/property/stations/station', name: 'Station', component: Station },
-    { path: '/leases/lease', name: 'Lease', component: Lease },
-    { path: '/accounts/balance', name: 'Balance', component: Balance },
+    { path: '/traders/traders', name: 'Traders', component: Traders,
+    beforeRouteEnter: checkAuth },
+    { path: '/traders/trader/new', name: 'TraderNew', component: Trader, props:true,
+    beforeRouteEnter: checkAuth },
+    { path: '/traders/trader/:id', name: 'TraderEdit', component: Trader, props:true,
+    beforeRouteEnter: checkAuth},
+    { path: '/payments/payment', name: 'Payments', component: Payment ,
+    beforeRouteEnter: checkAuth},
+    { path: '/property/units/unit', name: 'Unit', component: Unit,
+    beforeRouteEnter: checkAuth },
+    { path: '/property/stations/station', name: 'Station', component: Station,
+    beforeRouteEnter: checkAuth },
+    { path: '/leases/lease', name: 'Lease', component: Lease,
+    beforeRouteEnter: checkAuth },
+    { path: '/accounts/balance', name: 'Balance', component: Balance,
+    beforeRouteEnter: checkAuth },
     { path: '/users/user', name: 'User', component: User },
     { path: '/users/signup', name: 'Signup', component: Signup },
     { path: '/users/signin', name: 'Signin', component: Signin },
@@ -32,3 +42,12 @@ export default new Router({
   ],
   mode:'history'
 })
+
+function checkAuth(to, from, next) {
+//  if (!store.state.authorized) {
+  if (!store.state.user) {
+        next('/users/signin')  // they are not authorized, so redirect to login
+  } else {
+    next() // we are authorized, continue on to the requested route
+ }
+}

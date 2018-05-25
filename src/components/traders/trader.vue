@@ -33,7 +33,7 @@
                       </v-flex>
                       <v-spacer></v-spacer>
                       <v-flex xs8 >
-                      <v-text-field @input="hasChanged" prepend-icon="location_city" name="address" label="Address"  :disabled="isFormDisabled" v-model="traderCopy.address">{{traderCopy.address}}</v-text-field>
+                      <v-text-field @input="hasChanged" prepend-icon="location_city" name="streetAddress" label="Address"  :disabled="isFormDisabled" v-model="traderCopy.streetAddress">{{traderCopy.streetAddress}}</v-text-field>
                       </v-flex>
                   </v-layout>
                   <v-layout>
@@ -46,15 +46,49 @@
                             hint="The type of goods sold by the trader"
                             :disabled="isFormDisabled" v-model="traderCopy.commodity">{{traderCopy.commodity}}</v-text-field>
                        </v-flex>
-                   </v-layout>
-
-                   <v-layout row wrap class="light-text mb-2">
+                    </v-layout>
+                    <v-layout>
                         <v-flex>
-                        <!-- <v-checkbox left @input="hasChanged"   name="hasLeaseDocuments" :label="`Has Lease Docs: ${traderCopy.hasLeaseDocuments.toString()}`" :disabled="isFormDisabled" v-model="traderCopy.hasLeaseDocuments"></v-checkbox> -->
-                        <v-checkbox left @input="hasChanged"   name="hasLeaseDocuments" label="`Has Lease Docs:" :disabled="isFormDisabled" v-model="traderCopy.hasLeaseDocuments"></v-checkbox>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="city" label="City"
+                            hint="City"
+                            :disabled="isFormDisabled" v-model="traderCopy.city">{{traderCopy.city}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="province" label="Province"
+                            hint="Province"
+                            :disabled="isFormDisabled" v-model="traderCopy.province">{{traderCopy.province}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="postalCode" label="Postal Code"
+                            hint="Postal Code"
+                            :disabled="isFormDisabled" v-model="traderCopy.postalCode">{{traderCopy.postalCode}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="country" label="Country"
+                            hint="Country of residence"
+                            :disabled="isFormDisabled" v-model="traderCopy.country">{{traderCopy.country}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="company" label="Company"
+                            hint="Company description"
+                            :disabled="isFormDisabled" v-model="traderCopy.company">{{traderCopy.company}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="persontype" label="Person Type"
+                            hint="The type of goods sold by the trader"
+                            :disabled="isFormDisabled" v-model="traderCopy.persontype">{{traderCopy.persontype}}</v-text-field>
+                       </v-flex>
+                    </v-layout>
+                    <v-layout row wrap class="light-text mb-2">
+                        <v-flex>
+                        <!-- <v-checkbox left @input="hasChanged"   name="hasLeaseApplicationForm" :label="`Has Lease Docs: ${traderCopy.hasLeaseApplicationForm.toString()}`" :disabled="isFormDisabled" v-model="traderCopy.hasLeaseApplicationForm"></v-checkbox> -->
+                        <v-checkbox left @input="hasChanged"   name="hasLeaseApplicationForm" label="`Has Lease Docs:" :disabled="isFormDisabled" v-model="traderCopy.hasLeaseApplicationForm"></v-checkbox>
                         </v-flex>
                         <v-flex>
-                        <v-checkbox left @input="hasChanged"   name="hasProofOfResidence" label="Has Proof of Res: " :disabled="isFormDisabled" v-model="traderCopy.hasProofOfResidence"></v-checkbox>
+                        <v-checkbox left @input="hasChanged"   name="hasMarriageCertificate" label="`Has Marriage Cert:" :disabled="isFormDisabled" v-model="traderCopy.hasMarriageCertificate"></v-checkbox>
+                        </v-flex>
+                        <v-flex>
+                        <v-checkbox left @input="hasChanged"   name="hasProofOfAddress" label="Has Proof of Res: " :disabled="isFormDisabled" v-model="traderCopy.hasProofOfAddress"></v-checkbox>
                         </v-flex>
                     </v-layout>
                   </v-container>
@@ -65,6 +99,7 @@
           <v-btn flat color="orange" @click="doCancel">Cancel</v-btn>
           <v-btn flat color="orange" @click="doSave">Save</v-btn>
           <v-btn flat color="orange" @click="doClose">Close</v-btn>
+          <v-btn flat color="orange" @click="loadtradersHC">LoadHC</v-btn>
         </v-card-actions>
           <app-dialog :message="message" heading="Confirm Close?" :openDialog="showDialog"></app-dialog>
       </v-card>
@@ -74,19 +109,16 @@
 <script>
 import Dialog from '../shared/dialog'
 export default {
-   props: ['trader','expanded'],
-   computed: {
-     hasEditPermission(screen="trader"){
-       return true;  /// need to get it from the store.
-     }
-   },
+
+   props: ['id'],
+
    components:{
       appDialog:Dialog
    },
     data(){
         return {
           isFormDisabled:true,
-          traderCopy : {...this.trader},
+          //traderCopy : {...this.trader},
           formIsModified:false,
           snackbar: false,
           snackbartext:'',
@@ -95,6 +127,19 @@ export default {
           message:"Confirm Close",
           showDialog: false
         }
+    },
+    computed:{ hasEditPermission(){
+       return true;  /// need to get it from the store.
+     },
+      traderCopy(){
+        let trader = '';
+        if(this.id === '0')
+            trader = { ...this.$store.getters['traderModule/newTrader'] };  // copy the template
+         else {
+            trader = { ...this.$store.getters['traderModule/selectedTrader'](this.id) }// copy the actual existing trader for editing.
+         }
+         return trader;
+      }
     },
     methods: {
       showSnackBar(text){
@@ -107,14 +152,14 @@ export default {
       doEdit(){
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
         this.isFormDisabled = false;
-        this.traderCopy = { ...this.trader };
       },
       doCancel(){
         if(this.formIsModified) {
-
+      //show alert / dialogue confirming cancel
           this.formIsModified = false;
         }
         this.isFormDisabled = true;
+        this.$router.push('/traders/traders')
 
       },
       doClose(){
@@ -122,24 +167,43 @@ export default {
             this.showSnackBar('Form has been modified. First Save or else press Cancel.');
             return;
           }
-          this.$router.push('/trader/traders');
+          this.$router.push('/traders/traders');
+      },
+      loadtradersHC(){
+        const tradersHC = this.$store.getters['traderModule/loadedTradersHC'];
+        for( var tr of tradersHC){
+             this.$store.dispatch('traderModule/insertTrader', tr, {root:true})
+        }
       },
       doSave(){
         // Need to save this here. What does that mean?
         if(this.formIsModified) {
           this.$store.dispatch('resetError',{root:true});
-          console.log('error cleared. dispatching insertTrader')
-          this.$store.dispatch('traderModule/insertTrader', this.traderCopy, {root:true})
-          .then( result => {
-            if(this.$store.getters.error !== 'OK'){
-                this.showSnackBar(error);
-            }
-            else {
-              console.log('showing saved')
-              this.showSnackBar('Saved.');
-              this.formIsModified = false;
-            }
-          })
+          if(this.traderCopy.id === '0') {
+              this.$store.dispatch('traderModule/insertTrader', this.traderCopy, {root:true})
+                  .then( result => {
+                    if(this.$store.getters.error !== 'OK'){
+                        this.showSnackBar(error);
+                    }
+                    else {
+                      this.showSnackBar('Saved.');
+                      this.formIsModified = false;
+                    }
+                  })
+          }
+          else {
+              this.$store.dispatch('traderModule/updateTrader', this.traderCopy, {root:true})
+                  .then( result => {
+                    if(this.$store.getters.error !== 'OK'){
+                        this.showSnackBar(error);
+                    }
+                    else {
+                      this.showSnackBar('Saved.');
+                      this.formIsModified = false;
+                    }
+                  })
+
+          }
         }
 
       }

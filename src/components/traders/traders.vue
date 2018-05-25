@@ -26,7 +26,7 @@
     class="elevation-1"
   >
     <template slot="items" slot-scope="props" >
-      <tr   @click="editTrader(props)"  :key="props.item.id" @closeForm="props.expanded = false" >
+      <tr   @click="editTrader(props.item)"  :key="props.item.id" @closeForm="props.expanded = false" >
       <td>{{ props.item.firstname }}</td>
       <td class="text-xs-left">{{ props.item.surname }}</td>
       <td class="text-xs-left">{{ props.item.idNumber }}</td>
@@ -57,13 +57,14 @@ import Trader from './trader';
       appTrader:Trader
     },
     methods:{
-      editTrader(props) {
+      editTraderOLD(props) {
         props.expanded = !props.expanded;
       },
+      editTrader(editTrader) {
+        this.$router.push('/traders/trader/'+editTrader.id )
+      },
       createNew(){
-        let newtrader = this.$store.getters['traderModule/newTrader'];
-        this.$router.push({path:'/traders/trader', params: { trader: newtrader }});
-        //this.$router.push('/traders/trader/{id:2, fg:4, firstname:"asf"}');
+        this.$router.push('/traders/trader/0');
       }
     },
     data () {
@@ -84,6 +85,10 @@ import Trader from './trader';
         traders() {
           return this.$store.getters['traderModule/allTraders'];
         }
+      },
+      created(){
+        if (!this.$store.getters.allTraders)
+          this.$store.dispatch('traderModule/loadTraders');
       }
   }
 </script>

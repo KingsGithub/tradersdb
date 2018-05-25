@@ -95,7 +95,6 @@ export const store = new Vuex.Store({
   getters: {
      getUser(state){
        if(state.user) {
-       console.log(state.user);
        return state.user;
        } else return {id:'',permissions:[],accessToken:''};
      },

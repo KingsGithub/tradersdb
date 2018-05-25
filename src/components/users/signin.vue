@@ -73,16 +73,12 @@ export default {
     },
     methods: {
       onSignIn(){
-        // go via vuex to store the user in the store.
-        //this.$store.dispatch('resetError').then(res => {
             this.$store.dispatch('signin', {email:this.email, password: this.password});
-        // })
       }
     },
     computed:{
       error(){
         const errormessage = this.$store.getters.error;
-        console.log('computed error:', errormessage)
         if(errormessage !== 'OK') {
             this.loginError = errormessage; this.snackbar = true;
             return errormessage;

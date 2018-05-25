@@ -38,9 +38,7 @@
           email: this.email,
           password: this.password,
         }
-        // console.log(formData)
         this.$store.dispatch('login', {email: formData.email, password: formData.password})
-        console.log('logged in. route='+this.$router);
         this.$router.push('/dashboard');
 
       }
