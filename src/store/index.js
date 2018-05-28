@@ -10,7 +10,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   modules: { traderModule },
   state: {
-      error: { code:'0', message:'OK'},
+      error:null,
       user:null,
       // {
       //   id: '',
@@ -20,11 +20,11 @@ export const store = new Vuex.Store({
       loading:false
   },
   mutations: {
-    resetError(state){
-      state.error = {code:'0', message:'OK'};
+    clearError(state){
+      state.error = null
     },
-     setLoading(state,loadState){
-       state.loading = loadState;
+     setLoading(state){
+       state.loading = true;
      },
      clearLoading(state){
         state.loading = false;
@@ -36,17 +36,14 @@ export const store = new Vuex.Store({
        if(state.user)
         state.user=null;
     },
-    setError (state, errorObject){
+    setError (state, errorObject){ // { code:'nnn', message:'xyz' }
       state.error = errorObject;
     }
 
   },
   actions: {
-      resetError({commit}){
-        commit('resetError');
-      },
-      newTrader(){
-
+      clearError({commit}){
+        commit('clearError');
       },
       logout({commit}){
         firebase.auth().signOut()
@@ -54,24 +51,24 @@ export const store = new Vuex.Store({
         .catch(error => {commit('setError',{code:error.code, message:error.message});});
       },
       signin({commit}, payload){
-            commit('setLoading',true); commit('resetError');
+            commit('setLoading'); commit('clearError');
             firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
               .then( result => {
-                commit('setLoading',false);
+                commit('clearLoading');
                 firebase.auth().onAuthStateChanged( user => {
                   if(user) //comment
                   commit('setUser', { id: user.uid, accessToken:user.refreshToken , permissions: []});
                 })
               }).catch( error => {
-              commit('setLoading',false);
+              commit('clearLoading');
               commit('setError', { code: error.code, message: error.message }); });
       },
 
       signupUser({commit}, payload){
-            commit('resetError'); commit('setLoading', true);
+            commit('clearError'); commit('setLoading');
             firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
             .then ( user => {
-              commit('setLoading',false)
+              commit('clearLoading')
               firebase.auth().onAuthStateChanged( user => {
                       if(user){
                           const newUser = {
@@ -87,7 +84,7 @@ export const store = new Vuex.Store({
             .catch(
                 error => {
                   commit('setError',{code:error.code, message:error.message});
-                  commit('setLoading',false);
+                  commit('clearLoading');
                 }
             )
       }
@@ -104,7 +101,7 @@ export const store = new Vuex.Store({
        else return '';
      },
      error(state){
-       return state.error.message;
+       return state.error
      }
   }
 

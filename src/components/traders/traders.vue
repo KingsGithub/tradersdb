@@ -3,8 +3,6 @@
  <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
-        <v-card-media src="/static/doc-images/cards/IMG_1416small.png" height="100px">
-        </v-card-media>
         <v-card-title primary-title>
           <div>
             <h3>Trader List page</h3>
@@ -17,8 +15,15 @@
             single-line
             hide-details
           ></v-text-field>
+
         </v-card-title>
-<v-data-table
+        <v-layout v-if="loading" row>
+          <v-flex  xs12 sm6 offset-sm4>
+            <app-busywait :loading="test"></app-busywait>
+          </v-flex>
+        </v-layout>
+
+<v-data-table v-if="!loading"
     :headers="headers"
     :items="traders"
     :search="search"
@@ -84,6 +89,10 @@ import Trader from './trader';
     computed: {
         traders() {
           return this.$store.getters['traderModule/allTraders'];
+        },
+        loading(){
+          console.log("computing loading.....in traders.")
+          return this.$store.getters.loading
         }
       },
       created(){

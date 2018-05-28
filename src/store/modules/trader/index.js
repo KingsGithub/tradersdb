@@ -72,8 +72,8 @@ export const traderModule = {
           state.currentTrader = payload;
           },
           insertTrader({commit}, trader){
-              commit('resetError',null,{root:true});
-              commit('setLoading',null,{root:true});
+              commit('clearError',{root:true});
+              commit('setLoading',{root:true});
               var newkey = firebase.database().ref('traders').push().key;
               if(newkey){
                 trader.id = newkey;
@@ -83,30 +83,32 @@ export const traderModule = {
                     commit('clearLoading',null,{root:true});
                   })
                 .catch( function(error) {
-                  commit('setError', error.message,{root:true});
-                  commit('clearLoading',null,{root:true});
+                  commit('setError', {code: error.code, message:error.message},{root:true});
+                  commit('clearLoading',{root:true});
                 })
               }
 
           },
           updateTrader({commit}, trader){
-            commit('resetError',null,{root:true});
-            commit('setLoading',null,{root:true});
+            // commit('clearError',null,{root:true});
+            // commit('setLoading',null,{root:true});
+            commit('clearError',null, {root:true});
+            commit('setLoading',null, {root:true});
               firebase.database().ref('/traders/'+ trader.id).update(trader)
               .then ( function(result) {
                   commit('updateTrader',trader); //comment
-                  commit('clearLoading',null,{root:true});
+                  commit('clearLoading',null, {root:true});
                 })
               .catch( function(error) {
-                commit('setError', error.message,{root:true});
-                commit('clearLoading',null,{root:true});
+                commit('setError', { code: error.code, message: error.message},{root:true});
+                commit('clearLoading',null, {root:true});
               })
           },
           deleteTrader({commit}, traderId){
 
           },
           loadTraders({commit}){
-            commit('setLoading',null,{root:true});
+            commit('setLoading',null, {root:true});
             firebase.database().ref('traders').once('value')
             .then( (data) => {
                 const traders = [];
@@ -134,11 +136,11 @@ export const traderModule = {
                     })
                 };
                 commit('loadTraders',traders);
-                commit('clearLoading',null,{root:true});
+                commit('clearLoading',null, {root:true});
             })
             .catch(error =>{
-              commit('setError', error.message,{root:true});
-                  commit('clearLoading',null,{root:true});
+              commit('setError',  { code: error.code, message: error.message} ,{root:true});
+                  commit('clearLoading',null, {root:true});
             })
           }
       },
@@ -172,16 +174,3 @@ export const traderModule = {
 
       }
   }
-
-  // export const trader = {
-  // id :1,
-  // Surname :'Constantine',
-  // FirstName :'Frederick',
-  // HasProofOfAddress :false,
-  // HasLeaseApplicationForm : false,
-  // HasMarriageCertificate :false,
-  // EmailAddress :'constantinef@gmail.com',
-  // landLine :'0213948594',
-  // StreetAddress :'120 Main Road',  City :'Cape Town',  Province :'Western Cape',  PostalCode :'8001', Country :'South Africa',
-  //    Company :'JHB Oil', PersonType :'Trader'
-  // }

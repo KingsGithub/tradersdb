@@ -8,6 +8,9 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import firebaseConfig from './firebaseConfig.js'
+import Alert from './components/shared/alert.vue'
+import SnackBar from './components/shared/snackbar.vue'
+import BusyWait from './components/shared/busyWait.vue'
 
 Vue.use(Vuetify, {
   theme: {
@@ -22,6 +25,9 @@ Vue.use(Vuetify, {
 })
 
 Vue.config.productionTip = false
+Vue.component('app-alert', Alert)
+Vue.component('app-snackbar', SnackBar)
+Vue.component('app-busywait', BusyWait)
 
 /* eslint-disable no-new */
 

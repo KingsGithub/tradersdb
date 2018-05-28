@@ -1,9 +1,15 @@
 
 <template>
   <v-container>
+
     <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
+        <v-layout v-if="error" row>
+              <v-flex>
+                <app-alert :text="error.message" @closeAlert="closeAlert"></app-alert>
+              </v-flex>
+            </v-layout>
         <v-card-text>
           <v-container>
             <v-form @submit.prevent="onSignup">
@@ -73,6 +79,9 @@ export default {
         }
     },
     methods: {
+      closeAlert(){
+        this.$store.dispatch('clearError');
+      },
       onSignup(){
         // go via vuex to store the user in the store.
         const newUser = { email: this.email, password:this.password };
@@ -91,6 +100,10 @@ export default {
       },
       userId(){
         return this.$store.getters.userId; //yup
+      },
+      error(){
+        console.log(this.$store.getters.error);
+        return this.$store.getters.error
       }
     },
     watch: {

@@ -1,27 +1,13 @@
 <template>
-  <div>
-   <v-snackbar
-      :timeout="4000"
-      top
-      v-model="showSnackbar"
-    >
-      {{ alertText }}
-      <v-btn flat color="pink" @click.native="showSnackbar = false">Close</v-btn>
-    </v-snackbar>
-    </div>
+    <v-alert value="true" type="error" dismissible @click="closeAlert">
+      {{text}}
+    </v-alert>
 </template>
 <script>
-  export default {
-    props:['alertText','snackbar'],
-    data () {
-      return {
-        showSnackbar: false ||this.setSnackBar,
-      }
-    },
-    computed:{
-        setSnackBar(){
-            return this.snackbar //again
-        }
-    }
+export default {
+  props:['text'],
+  methods:{
+      closeAlert(){this.$emit('closeAlert')}
   }
+}
 </script>

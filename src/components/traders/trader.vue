@@ -178,12 +178,12 @@ export default {
       doSave(){
         // Need to save this here. What does that mean?
         if(this.formIsModified) {
-          this.$store.dispatch('resetError',{root:true});
+          this.$store.dispatch('clearError',{root:true});
           if(this.traderCopy.id === '0') {
               this.$store.dispatch('traderModule/insertTrader', this.traderCopy, {root:true})
                   .then( result => {
-                    if(this.$store.getters.error !== 'OK'){
-                        this.showSnackBar(error);
+                    if(this.$store.getters.error){
+                        this.showSnackBar(error.message);
                     }
                     else {
                       this.showSnackBar('Saved.');
@@ -194,8 +194,8 @@ export default {
           else {
               this.$store.dispatch('traderModule/updateTrader', this.traderCopy, {root:true})
                   .then( result => {
-                    if(this.$store.getters.error !== 'OK'){
-                        this.showSnackBar(error);
+                    if(this.$store.getters.error){
+                        this.showSnackBar(error.message);
                     }
                     else {
                       this.showSnackBar('Saved.');
