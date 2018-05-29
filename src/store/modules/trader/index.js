@@ -8,7 +8,7 @@ export const traderModule = {
           id:'0', firstname:'', surname:'', email:'', cellphone:'', address:'',
           hasLeaseApplicationForm: false, hasProofOfAddress:false, idNumber: '', commodity:'',
           city :'Cape Town',  province :'Western Cape',  postalCode :'8001', country :'South Africa',
-               company :'JHB Oil', personType :'Trader'
+               company :'', personType :'Trader'
         },
           currentTrader: {
             id :0,
@@ -61,7 +61,8 @@ export const traderModule = {
           state.loadedTraders.push(trader);
         },
         updateTrader(state, trader){
-
+          var oldTrader = state.loadedTraders.find(function (obj) { return obj.id === trader.id; });
+          oldTrader = trader
         },
         deleteTrader(state, traderId){
 
@@ -72,8 +73,8 @@ export const traderModule = {
           state.currentTrader = payload;
           },
           insertTrader({commit}, trader){
-              commit('clearError',{root:true});
-              commit('setLoading',{root:true});
+              commit('clearError',null,{root:true});
+              commit('setLoading',null,{root:true});
               var newkey = firebase.database().ref('traders').push().key;
               if(newkey){
                 trader.id = newkey;
@@ -84,14 +85,12 @@ export const traderModule = {
                   })
                 .catch( function(error) {
                   commit('setError', {code: error.code, message:error.message},{root:true});
-                  commit('clearLoading',{root:true});
+                  commit('clearLoading',null,{root:true});
                 })
               }
 
           },
           updateTrader({commit}, trader){
-            // commit('clearError',null,{root:true});
-            // commit('setLoading',null,{root:true});
             commit('clearError',null, {root:true});
             commit('setLoading',null, {root:true});
               firebase.database().ref('/traders/'+ trader.id).update(trader)
@@ -105,11 +104,10 @@ export const traderModule = {
               })
           },
           deleteTrader({commit}, traderId){
-
           },
           loadTraders({commit}){
             commit('setLoading',null, {root:true});
-            firebase.database().ref('traders').once('value')
+            firebase.database().ref('traders').once('value') //help
             .then( (data) => {
                 const traders = [];
                 const obj = data.val()
@@ -125,7 +123,6 @@ export const traderModule = {
                       cellphone: obj[key].cellphone,
                       commodity: obj[key].commodity,
                       idNumber: obj[key].idNumber,
-                      landLine :obj[key].landLine,
                       streetAddress :obj[key].streetAddress,
                       city :obj[key].city,
                       province :obj[key].province,
@@ -146,10 +143,9 @@ export const traderModule = {
       },
       getters: {
           allTraders( state ){
-            return state.loadedTraders ;
-          //   .sort ( (traderA, traderB) => {
-          //     return traderA.name > traderB.name;
-          //  })
+            return state.loadedTraders.sort ( (traderA, traderB) => {
+                          return traderA.name > traderB.name;
+                    })
           },
           getTraderById: state => (id) => {
             return state.loadedTraders.find(trader => trader.id === id); },

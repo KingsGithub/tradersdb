@@ -10,7 +10,7 @@
       <v-card v-if="!loading">
         <v-card-title primary-title>
           <div>
-            <h3>Trader List Page     <small>[click row to edit]</small></h3>
+            <h3>Station List Page     <small>[click row to edit]</small></h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -24,24 +24,21 @@
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="traders"
+            :items="stations"
             :search="search"
             hide-actions
             :loading="loading"
             class="elevation-1"
           >
             <template slot="items" slot-scope="props" >
-              <tr   @click="editTrader(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
-              <td class="text-xs-left">{{ props.item.firstname }}</td>
-              <td class="text-xs-left">{{ props.item.surname }}</td>
-              <td class="text-xs-left">{{ props.item.idNumber }}</td>
-              <td class="text-xs-left">{{ props.item.commodity }}</td>
-              <td class="text-xs-left">{{ props.item.email }}</td>
-              <td class="text-xs-left">{{ props.item.cellphone }}</td>
+              <tr   @click="editStation(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.address }}</td>
+              <td class="text-xs-left">{{ props.item.phone }}</td>
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
-                <appTrader :trader="props.item" :expanded="props.expanded"></appTrader>
+                <appStation :station="props.item" :expanded="props.expanded"></appStation>
             </template>
           </v-data-table>
           <v-card-actions>
@@ -54,50 +51,47 @@
   </v-layout>
 </template>
 <script>
-import Trader from './trader';
+import Station from './station';
   export default {
     components:{
-      appTrader:Trader
+      appStation:Station
     },
     methods:{
-      editTraderOLD(props) {
+      editStationOLD(props) {
         props.expanded = !props.expanded;
       },
       closeForm() {
         this.$router.push('/')
       },
-      editTrader(editTrader){
-          this.$router.push('/traders/trader/'+editTrader.id )
+      editStation(editStation){
+          this.$router.push('/property/stations/station/'+editStation.id )
       },
       createNew(){
-        this.$router.push('/traders/trader/0'); //testing git
+        this.$router.push('/property/stations/station/0'); //testing git
       }
     },
     data () {
       return {
         search:'',
-        newTrader: {},
+        newStation: {},
         headers: [
-          { text: 'FirstName', value: 'firstname', align: 'left' },
-          { text: 'Surname', value: 'surname' },
-          { text: 'IDNumber', value: 'idNumber' },
-          { text: 'Commodity', value: 'commodity' },
-          { text: 'Email', value: 'email' },
-          { text: 'CellPhone', value: 'cellphone' }
+          { text: 'Station Name', value: 'name', align: 'left' },
+          { text: 'Address', value: 'address' },
+          { text: 'Phone', value: 'phone' }
         ]
       }
     },
     computed: {
-        traders() {
-          return this.$store.getters['traderModule/allTraders'];
+        stations() {
+          return this.$store.getters['stationModule/allStations'];
         },
         loading(){
           return this.$store.getters.loading
         }
       },
       created(){
-        if (!this.$store.getters.allTraders)
-          this.$store.dispatch('traderModule/loadTraders');
+        if (!this.$store.getters.allStations)
+          this.$store.dispatch('stationModule/loadStations');
       }
   }
 </script>

@@ -53,7 +53,8 @@
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
-      <router-view/>
+      <v-spacer></v-spacer>
+      <router-view class="mt-2"/>
     </v-content>
 
     <v-footer :fixed="fixed" app>
@@ -94,8 +95,8 @@ export default {
         if (user.id != '' ){
           return [
                   { icon: 'people', title: 'Traders', link: '/traders/traders', tooltip:'List of Traders'},
-                  { icon: 'commute', title: 'Stations', link: '/property/stations/station', tooltip:'View and edit Stations'},
-                  { icon: 'store', title: 'Units', link: '/property/units/unit', tooltip:'View and edit Units'},
+                  { icon: 'commute', title: 'Stations', link: '/property/stations/stations', tooltip:'View and edit Stations'},
+                  { icon: 'store', title: 'Units', link: '/property/units/units', tooltip:'View and edit Units'},
                   { icon: 'file_copy', title: 'Leases', link: '/leases/lease', tooltip:'View and edit Leases'},
                   { icon: 'receipt', title: 'Payments', link: '/payments/payment', tooltip:'View and edit Payments'},
                   { icon: 'account_balance', title: 'Accounts', link: '/accounts/balance', tooltip:'View and edit Balances'},

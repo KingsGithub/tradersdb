@@ -10,7 +10,7 @@
       <v-card v-if="!loading">
         <v-card-title primary-title>
           <div>
-            <h3>Trader List Page     <small>[click row to edit]</small></h3>
+            <h3>Unit List Page     <small>[click row to edit]</small></h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -24,24 +24,22 @@
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="traders"
+            :items="units"
             :search="search"
             hide-actions
             :loading="loading"
             class="elevation-1"
           >
             <template slot="items" slot-scope="props" >
-              <tr   @click="editTrader(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
-              <td class="text-xs-left">{{ props.item.firstname }}</td>
-              <td class="text-xs-left">{{ props.item.surname }}</td>
-              <td class="text-xs-left">{{ props.item.idNumber }}</td>
-              <td class="text-xs-left">{{ props.item.commodity }}</td>
-              <td class="text-xs-left">{{ props.item.email }}</td>
-              <td class="text-xs-left">{{ props.item.cellphone }}</td>
+              <tr   @click="editUnit(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
+              <td class="text-xs-left">{{ props.item.unitNumber }}</td>
+              <td class="text-xs-left">{{ props.item.unitSize }}</td>
+              <td class="text-xs-left">{{ props.item.stationID }}</td>
+              <td class="text-xs-left">{{ props.item.isVacant }}</td>
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
-                <appTrader :trader="props.item" :expanded="props.expanded"></appTrader>
+                <appUnit :unit="props.item" :expanded="props.expanded"></appUnit>
             </template>
           </v-data-table>
           <v-card-actions>
@@ -54,50 +52,48 @@
   </v-layout>
 </template>
 <script>
-import Trader from './trader';
+import Unit from './unit';
   export default {
     components:{
-      appTrader:Trader
+      appUnit:Unit
     },
     methods:{
-      editTraderOLD(props) {
+      editUnitOLD(props) {
         props.expanded = !props.expanded;
       },
       closeForm() {
         this.$router.push('/')
       },
-      editTrader(editTrader){
-          this.$router.push('/traders/trader/'+editTrader.id )
+      editUnit(editUnit){
+          this.$router.push('/property/units/unit/'+editUnit.id )
       },
       createNew(){
-        this.$router.push('/traders/trader/0'); //testing git
+        this.$router.push('/property/units/unit/0'); //testing git
       }
     },
     data () {
       return {
         search:'',
-        newTrader: {},
+        newUnit: {},
         headers: [
-          { text: 'FirstName', value: 'firstname', align: 'left' },
-          { text: 'Surname', value: 'surname' },
-          { text: 'IDNumber', value: 'idNumber' },
-          { text: 'Commodity', value: 'commodity' },
-          { text: 'Email', value: 'email' },
-          { text: 'CellPhone', value: 'cellphone' }
+          { text: 'Unit Number', value: 'unitNumber', align: 'left' },
+          { text: 'Unit Size', value: 'unitSize' },
+          { text: 'Station Id', value: 'stationID' },
+          { text: 'Is Vacant', value: 'isVacant' }
         ]
       }
     },
     computed: {
-        traders() {
-          return this.$store.getters['traderModule/allTraders'];
+        units() {
+          return this.$store.getters['unitModule/allUnits'];
         },
         loading(){
           return this.$store.getters.loading
         }
       },
       created(){
-        if (!this.$store.getters.allTraders)
-          this.$store.dispatch('traderModule/loadTraders');
+        if (!this.$store.getters.allUnits)
+          this.$store.dispatch('unitModule/loadUnits');
       }
   }
 </script>

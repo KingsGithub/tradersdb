@@ -7,8 +7,8 @@
         <v-card-text>{{message}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click.native="dialog = false">No</v-btn>
-          <v-btn color="green darken-1" flat @click.native="dialog = false">Yes</v-btn>
+          <v-btn color="green darken-1" flat @click.native="closeDialog(false)">No</v-btn>
+          <v-btn color="green darken-1" flat @click.native="closeDialog(true)">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -16,10 +16,16 @@
 </template>
 <script>
   export default {
-    props:['heading', 'message', 'openDialog'],
-    data () {
-      return {
-        dialog: this.openDialog
+    props:['heading', 'message'],
+    methods:{
+      closeDialog(answer){
+        this.$emit('dialogClosed', answer);
+        this.$store.dispatch('dialog', false)
+      }
+    },
+    computed: {
+      dialog(){
+        return this.$store.getters.dialog
       }
     }
   }
