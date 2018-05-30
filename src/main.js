@@ -11,6 +11,7 @@ import firebaseConfig from './firebaseConfig.js'
 import Alert from './components/shared/alert.vue'
 import SnackBar from './components/shared/snackbar.vue'
 import BusyWait from './components/shared/busyWait.vue'
+import Dialog from './components/shared/dialog.vue'
 
 Vue.use(Vuetify, {
   theme: {
@@ -28,6 +29,7 @@ Vue.config.productionTip = false
 Vue.component('app-alert', Alert)
 Vue.component('app-snackbar', SnackBar)
 Vue.component('app-busywait', BusyWait)
+Vue.component('app-dialog',Dialog)
 
 /* eslint-disable no-new */
 
@@ -38,5 +40,8 @@ new Vue({
   render: h => h(App),
   created(){
     firebase.initializeApp(firebaseConfig);
+    this.$store.dispatch('stationModule/loadStations')
+    this.$store.dispatch('unitModule/loadUnits')
+    this.$store.dispatch('traderModule/loadTraders')
   }
 })

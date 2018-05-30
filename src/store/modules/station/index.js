@@ -11,6 +11,8 @@ export const stationModule = {
                 phone: ''
           } ,
           loadedStations: [],
+          loadedStationsChanged :false,
+          stationsLOV:[],
           loadedStationsHC:[
             {
               id:'Cape Town',
@@ -26,17 +28,27 @@ export const stationModule = {
         },
         insertStation(state, station){
           state.loadedStations.push(station);
+          loadedStationsChanged = true;
+        },
+        setStationsLOV(state, lov){
+            state.stationsLOV = lov;
+            loadedStationsChanged = false;
         },
         updateStation(state, station){
-
+            let ss = state.loadedStations.find( (stat)=>{ stat.id === station.id});
+            ss = station;
+            loadedStationsChanged = true;
         },
         deleteStation(state, stationId){
 
         }
       },
       actions: {
+          setStationsLOV({commit}, lov){
+            commit(setStationsLOV, lov);
+          },
           setCurrentStation(state,payload){
-          state.currentStation = payload;
+              state.currentStation = payload;
           },
           insertStation({commit}, station){
             commit('clearError',null, {root:true});
@@ -76,6 +88,7 @@ export const stationModule = {
             firebase.database().ref('stations').once('value') //help
             .then( (data) => {
                 const stations = [];
+                const stationsLOV = [];
                 const obj = data.val()
                 for(let key in obj) {
                     stations.push({
@@ -84,8 +97,12 @@ export const stationModule = {
                       address: obj[key].address,
                       phone: obj[key].phone
                     })
+                    stationsLOV.push({
+                      id: key, name:obj[key].name
+                    })
                 };
                 commit('loadStations',stations);
+                commit('setStationsLOV', stationsLOV.sort((a,b)=>{return a.name > b.name} ));
                 commit('clearLoading',null, {root:true});
             })
             .catch(error =>{
@@ -120,7 +137,23 @@ export const stationModule = {
           },
           loadedStationsHC(state){
             return state.loadedStationsHC;
+          },
+          stationsLOV(state){
+            if(!state.loadedStations) {
+              dispatch('loadStations').then( res => {
+                return state.stationsLOV;
+              })
+            }else if(state.loadedStationsChanged){
+                          let lov = [];
+                          this.state.loadedStations.array.forEach(element => {
+                              lov.push({ id: element.id, name: element.name });
+                          });
+                          lov.sort( (a,b) => {return a.name > b.name})
+                          dispatch('setStationsLOV', lov).then ( res=>{
+                            return state.stationsLOV;
+                          })
+            }
+            else return state.stationsLOV;
           }
-
       }
   }

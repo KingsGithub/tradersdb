@@ -31,9 +31,19 @@
                   </v-layout>
                   <v-layout row wrap class="light-text">
                       <v-flex xs5>
-                      <v-text-field @input="hasChanged" prepend-icon="mail_outline" name="stationID" label="Station ID"  disabled
-                                    v-model="unitCopy.stationID"  required :rules="[rules.required]" >{{unitCopy.stationID}}
+                      <v-text-field  @input="hasChanged" prepend-icon="mail_outline" name="stationID" label="Station ID"  disabled
+                                    v-model="unitCopy.stationID"   :rules="[rules.required]" >{{unitCopy.stationID}}
                       </v-text-field>
+                      </v-flex>
+                       <v-flex xs12 sm6>
+                        <v-select  @input="hasChanged" prepend-icon="mail_outline" name="stationsLOV"  :disabled="isFormDisabled"
+                          :items="stationsLOV"
+                          v-model="unitCopy.stationID"
+                          item-text="text"
+                          item-value="value"
+                          label="Station"
+                          autocomplete
+                        ></v-select>
                       </v-flex>
                       <v-flex xs3>
                       <v-text-field @input="hasChanged" prepend-icon="location_city" name="address" label="Address"
@@ -96,7 +106,7 @@
               <v-btn flat color="orange" @click="doClose">Close</v-btn>
               <v-btn flat color="orange" @click="loadunitsHC">LoadHC</v-btn>
         </v-card-actions>
-          <app-dialog :message="message" persistent :heading="heading" @dialogClosed="closeDialog"></app-dialog>
+         <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
     </v-flex>
   </v-layout>
@@ -113,13 +123,13 @@ export default {
     data(){
         return {
           isFormDisabled:true,
-          //unitCopy : {...this.unit},
+          unitDBCopy : {},
           formIsModified:false,
           snackbar: false,
           snackbartext:'',
           timeoutt:2500,
           yposition:true,
-          message:"Cancel?",
+          message:"Form has changed. Cancel Edits?",
           heading:"Confirm Cancel",
           showDialog: false,
           rules: {
@@ -131,9 +141,13 @@ export default {
           }
         }
     },
-    computed:{ hasEditPermission(){
-       return true;  /// need to get it from the store.
-     },
+    computed:{
+        hasEditPermission(){
+              return true;  /// need to get it from the store.
+      },
+      stationsLOV(){
+          return this.$store.getters['stationModule/stationsLOV'];
+      },
       unitCopy(){
         let unit = '';
         if(this.id === '0')
@@ -141,7 +155,8 @@ export default {
          else {
             unit = { ...this.$store.getters['unitModule/selectedUnit'](this.id) }// copy the actual existing unit for editing.
          }
-         return unit;
+         this.unitDBCopy = unit;
+         return this.unitDBCopy;
       }
     },
     methods: {
@@ -159,29 +174,38 @@ export default {
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
         this.isFormDisabled = false;
       },
+      cancelEdits(confirmed){
+          if(confirmed){
+            this.isFormDisabled = true;
+            this.$router.push('/property/units/units')
+          }
+          else {
+              this.showDialog = false;
+              this.formIsModified = true;
+          }
+      },
+      doDialog(heading, message){
+          if(this.formIsModified) {
+              this.heading = heading
+              this.showDialog = true;
+          }
+          else {
+              this.isFormDisabled = true;
+              this.$router.push('/property/units/units')
+          }
+      },
+      doCancel(){
+          this.doDialog('Confirm Cancel', this.message);
+      },
+      doClose(){
+          this.doDialog("Confirm Close",this.message)
+      },
       closeDialog(value){
           if(value) {// answer is in the affirmative to close even if not saved.
               this.formIsModified = false;
               this.isFormDisabled = true;
               this.$router.push('/property/units/units')
           }
-      },
-      doCancel(){
-        if(this.formIsModified) {
-          this.$store.dispatch('dialog',true)
-        }
-        else {
-            this.formIsModified = false;
-            this.isFormDisabled = true;
-            this.$router.push('/property/units/units')
-        }
-      },
-      doClose(){
-          if(this.formIsModified) {
-            this.showSnackBar('Form has been modified. First Save or else press Cancel.');
-            return;
-          }
-          this.$router.push('/property/units/units');
       },
       loadunitsHC(){
         const unitsHC = this.$store.getters['unitModule/loadedUnitsHC'];

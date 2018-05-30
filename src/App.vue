@@ -120,7 +120,11 @@ export default {
       console.log(item);
       event.target.innerHtml = item.tooltip;
     }
+  },
+  created(){
+    this.$store.dispatch('stationModule/loadStations')
+    this.$store.dispatch('unitModule/loadUnits')
+    this.$store.dispatch('traderModule/loadTraders')
   }
-
 }
 </script>

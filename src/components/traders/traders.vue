@@ -10,7 +10,7 @@
       <v-card v-if="!loading">
         <v-card-title primary-title>
           <div>
-            <h3>Trader List Page     <small>[click row to edit]</small></h3>
+            <h3>Trader List Page     <small class="orange--text">[click row to edit]</small></h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -46,8 +46,8 @@
           </v-data-table>
           <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="orange" @click="createNew">New</v-btn>
-          <v-btn flat color="orange" @click="closeForm">Close</v-btn>
+          <v-btn dark color="orange" @click="createNew">New</v-btn>
+          <v-btn dark color="orange" @click="closeForm">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

@@ -34,7 +34,7 @@
               <tr   @click="editUnit(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
               <td class="text-xs-left">{{ props.item.unitNumber }}</td>
               <td class="text-xs-left">{{ props.item.unitSize }}</td>
-              <td class="text-xs-left">{{ props.item.stationID }}</td>
+              <td class="text-xs-left">{{ props.item.stationName }}</td>
               <td class="text-xs-left">{{ props.item.isVacant }}</td>
               </tr>
             </template>
@@ -78,14 +78,25 @@ import Unit from './unit';
         headers: [
           { text: 'Unit Number', value: 'unitNumber', align: 'left' },
           { text: 'Unit Size', value: 'unitSize' },
-          { text: 'Station Id', value: 'stationID' },
+          { text: 'Station', value: 'stationName' },
           { text: 'Is Vacant', value: 'isVacant' }
         ]
       }
     },
     computed: {
         units() {
-          return this.$store.getters['unitModule/allUnits'];
+          let statLOV = this.$store.getters['stationModule/stationsLOV'];
+          console.log('statlov=',statLOV)
+          let runits = [];
+          if(statLOV) {
+              this.$store.getters['unitModule/allUnits'].forEach( u => {
+                    let item = { ...u, stationName: statLOV.find( x => {return x.id = u.stationID} ).name }
+                    runits.push(item);
+                });
+              return runits;
+          }
+          else
+          return this.$store.getters['unitModule/allUnits']
         },
         loading(){
           return this.$store.getters.loading

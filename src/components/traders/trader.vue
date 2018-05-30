@@ -126,30 +126,24 @@
               <v-btn flat color="orange" @click="doClose">Close</v-btn>
               <!-- <v-btn flat color="orange" @click="loadtradersHC">LoadHC</v-btn> -->
         </v-card-actions>
-          <app-dialog :message="message" persistent :heading="heading" @dialogClosed="closeDialog"></app-dialog>
+          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
     </v-flex>
   </v-layout>
 </template>
 <script>
-import Dialog from '../shared/dialog'
 export default {
-
    props: ['id'],
-
-   components:{
-      appDialog:Dialog
-   },
     data(){
         return {
           isFormDisabled:true,
-          //traderCopy : {...this.trader},
           formIsModified:false,
           snackbar: false,
           snackbartext:'',
           timeoutt:2500,
+          traderdbCopy:{},
           yposition:true,
-          message:"Cancel?",
+          message:"Form has changed. Cancel Edits?",
           heading:"Confirm Cancel",
           showDialog: false,
           rules: {
@@ -171,6 +165,7 @@ export default {
          else {
             trader = { ...this.$store.getters['traderModule/selectedTrader'](this.id) }// copy the actual existing trader for editing.
          }
+         this.traderdbCopy = {...trader} // Note - it's a separate copy!
          return trader;
       }
     },
@@ -189,29 +184,31 @@ export default {
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
         this.isFormDisabled = false;
       },
-      closeDialog(value){
-          if(value) {// answer is in the affirmative to close even if not saved.
-              this.formIsModified = false;
+      cancelEdits(confirmed){
+          if(confirmed){
+            this.isFormDisabled = true;
+            this.$router.push('/traders/traders')
+          }
+          else {
+              this.showDialog = false;
+              this.formIsModified = true;
+          }
+      },
+      doDialog(heading, message){
+          if(this.formIsModified) {
+              this.heading = heading
+              this.showDialog = true;
+          }
+          else {
               this.isFormDisabled = true;
               this.$router.push('/traders/traders')
           }
       },
       doCancel(){
-        if(this.formIsModified) {
-          this.$store.dispatch('dialog',true)
-        }
-        else {
-            this.formIsModified = false;
-            this.isFormDisabled = true;
-            this.$router.push('/traders/traders')
-        }
+          this.doDialog('Confirm Cancel', this.message);
       },
       doClose(){
-          if(this.formIsModified) {
-            this.showSnackBar('Form has been modified. First Save or else press Cancel.');
-            return;
-          }
-          this.$router.push('/traders/traders');
+          this.doDialog("Confirm Close",this.message)
       },
       loadtradersHC(){
         const tradersHC = this.$store.getters['traderModule/loadedTradersHC'];

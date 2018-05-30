@@ -45,7 +45,7 @@
               <v-btn flat color="orange" @click="doClose">Close</v-btn>
               <!-- <v-btn flat color="orange" @click="loadstationsHC">LoadHC</v-btn> -->
         </v-card-actions>
-          <app-dialog :message="message" persistent :heading="heading" @dialogClosed="closeDialog"></app-dialog>
+         <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
     </v-flex>
   </v-layout>
@@ -68,7 +68,7 @@ export default {
           snackbartext:'',
           timeoutt:2500,
           yposition:true,
-          message:"Cancel?",
+          message:"Form has changed. Cancel Edits?",
           heading:"Confirm Cancel",
           showDialog: false,
           rules: {
@@ -108,29 +108,38 @@ export default {
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
         this.isFormDisabled = false;
       },
+      cancelEdits(confirmed){
+          if(confirmed){
+            this.isFormDisabled = true;
+            this.$router.push('/property/stations/stations')
+          }
+          else {
+              this.showDialog = false;
+              this.formIsModified = true;
+          }
+      },
+      doDialog(heading, message){
+          if(this.formIsModified) {
+              this.heading = heading
+              this.showDialog = true;
+          }
+          else {
+              this.isFormDisabled = true;
+              this.$router.push('/property/stations/stations')
+          }
+      },
+      doCancel(){
+          this.doDialog('Confirm Cancel', this.message);
+      },
+      doClose(){
+          this.doDialog("Confirm Close",this.message)
+      },
       closeDialog(value){
           if(value) {// answer is in the affirmative to close even if not saved.
               this.formIsModified = false;
               this.isFormDisabled = true;
               this.$router.push('/property/stations/stations')
           }
-      },
-      doCancel(){
-        if(this.formIsModified) {
-          this.$store.dispatch('dialog',true)
-        }
-        else {
-            this.formIsModified = false;
-            this.isFormDisabled = true;
-            this.$router.push('/property/stations/stations')
-        }
-      },
-      doClose(){
-          if(this.formIsModified) {
-            this.showSnackBar('Form has been modified. First Save or else press Cancel.');
-            return;
-          }
-          this.$router.push('/property/stations/stations');
       },
       loadstationsHC(){
         const stationsHC = this.$store.getters['stationModule/loadedStationsHC'];
