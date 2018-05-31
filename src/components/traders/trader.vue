@@ -165,8 +165,8 @@ export default {
          else {
             trader = { ...this.$store.getters['traderModule/selectedTrader'](this.id) }// copy the actual existing trader for editing.
          }
-         this.traderdbCopy = {...trader} // Note - it's a separate copy!
-         return trader;
+         this.traderdbCopy = trader
+         return this.traderdbCopy;
       }
     },
     methods: {
@@ -247,7 +247,7 @@ export default {
           }
       } else {
         this.showSnackBar("Not modified")
-               console.log('NOT MODIFIED!!!!!')
+
       }
     }
   }

@@ -16,36 +16,34 @@
                   <v-container>
                   <v-text-field type = "hidden" name="id" :id="unitCopy.id"></v-text-field>
                   <v-layout row wrap class="light-text">
-                      <v-flex xs5>
+                      <v-flex xs4>
                         <v-text-field @input="hasChanged"  prepend-icon="store" name="unitNumber" label="Unit Number"
                                       :disabled="isFormDisabled" v-model="unitCopy.unitNumber"  required :rules="[rules.required]"
                                       >{{unitCopy.unitNumber}}
                         </v-text-field>
                       </v-flex>
-
-                      <v-flex xs5 class="ml-4">
-                          <v-text-field @input="hasChanged" id="unitSize" name="unitSize" label="Unit Size"  :disabled="isFormDisabled"
-                                        v-model="unitCopy.unitSize"   required :rules="[rules.required]">{{unitCopy.unitSize}}
-                          </v-text-field>
+                      <v-flex xs2 class="ml-4">
+                        <v-select  @input="hasChanged" prepend-icon="flip_to_front" name="unitSizeLOV"  :disabled="isFormDisabled"
+                          :items="unitSizes"
+                          v-model="unitCopy.unitSize"
+                          label="Unit Size"
+                          autocomplete
+                        ></v-select>
                       </v-flex>
+
                   </v-layout>
                   <v-layout row wrap class="light-text">
-                      <v-flex xs5>
-                      <v-text-field  @input="hasChanged" prepend-icon="mail_outline" name="stationID" label="Station ID"  disabled
-                                    v-model="unitCopy.stationID"   :rules="[rules.required]" >{{unitCopy.stationID}}
-                      </v-text-field>
-                      </v-flex>
-                       <v-flex xs12 sm6>
-                        <v-select  @input="hasChanged" prepend-icon="mail_outline" name="stationsLOV"  :disabled="isFormDisabled"
+                       <v-flex xs12 sm4>
+                        <v-select  @input="hasChanged" prepend-icon="commute" name="stationsLOV"  :disabled="isFormDisabled"
                           :items="stationsLOV"
                           v-model="unitCopy.stationID"
-                          item-text="text"
-                          item-value="value"
+                          item-text="name"
+                          item-value="id"
                           label="Station"
                           autocomplete
                         ></v-select>
                       </v-flex>
-                      <v-flex xs3>
+                      <v-flex xs4 class="ml-4">
                       <v-text-field @input="hasChanged" prepend-icon="location_city" name="address" label="Address"
                                     disabled v-model="unitCopy.address"  required :rules="[rules.required]">
                                     {{unitCopy.address}}
@@ -53,25 +51,26 @@
                       </v-flex>
                   </v-layout>
                   <v-layout>
-                      <v-flex xs2>
+                      <v-flex xs4 >
                           <v-text-field xs4 @input="hasChanged" prepend-icon="location_city" name="city" label="City"
                           disabled v-model="unitCopy.city" required :rules="[rules.required]">
                             {{unitCopy.city}}</v-text-field>
                       </v-flex>
-                      <v-spacer></v-spacer>
-                      <v-flex xs4>
-                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="Province" label="Province"
-                            hint="Province"
-                            disabled v-model="unitCopy.Province"  required :rules="[rules.required]" >
-                            {{unitCopy.Province}}</v-text-field>
-                       </v-flex>
                        <v-flex xs2>
-                        <v-text-field xs3 @input="hasChanged" prepend-icon="store" name="postalCode" label="Postal Code"
+                        <v-text-field class="ml-4"  xs3 @input="hasChanged" prepend-icon="store" name="postalCode" label="Postal Code"
                             hint="Postal Code"
                             disabled v-model="unitCopy.postalCode">{{unitCopy.postalCode}}</v-text-field>
                        </v-flex>
-                       <v-flex xs2>
-                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="propertyType" label="Property Type"
+                  </v-layout>
+                  <v-layout>
+                       <v-flex xs4>
+                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="province" label="Province"
+                            hint="Province"
+                            disabled v-model="unitCopy.province"  required :rules="[rules.required]" >
+                            {{unitCopy.Province}}</v-text-field>
+                       </v-flex>
+                       <v-flex>
+                        <v-text-field xs8 class="ml-4" @input="hasChanged" prepend-icon="store" name="propertyType" label="Property Type"
                             hint="Classification of property involved"
                             disabled v-model="unitCopy.propertyType"  required :rules="[rules.required]"
                             >{{unitCopy.propertyType}}</v-text-field>
@@ -124,6 +123,7 @@ export default {
         return {
           isFormDisabled:true,
           unitDBCopy : {},
+          unitSizes: ['Std', 'Big', 'Small', 'Double'],
           formIsModified:false,
           snackbar: false,
           snackbartext:'',
@@ -146,7 +146,7 @@ export default {
               return true;  /// need to get it from the store.
       },
       stationsLOV(){
-          return this.$store.getters['stationModule/stationsLOV'];
+          return this.$store.getters['stationModule/allStations'];
       },
       unitCopy(){
         let unit = '';
@@ -244,7 +244,7 @@ export default {
           }
       } else {
         this.showSnackBar("Not modified")
-               console.log('NOT MODIFIED!!!!!')
+
       }
     }
   }

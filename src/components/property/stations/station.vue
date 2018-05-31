@@ -179,7 +179,7 @@ export default {
           }
       } else {
         this.showSnackBar("Not modified")
-               console.log('NOT MODIFIED!!!!!')
+
       }
     }
   }

@@ -8,6 +8,7 @@ import Station from '@/components/property/stations/station'
 import Units from '@/components/property/units/units'
 import Unit from '@/components/property/units/unit'
 import Lease from '@/components/leases/lease'
+import Leases from '@/components/leases/leases'
 import Payment from '@/components/payments/payment'
 import Balance from '@/components/accounts/balance'
 import User from '@/components/users/user'
@@ -42,7 +43,11 @@ export default new Router({
     beforeRouteEnter: checkAuth },
     { path: '/property/stations/station/:id', name: 'StationEdit', component: Station, props:true,
     beforeRouteEnter: checkAuth },
-    { path: '/leases/lease', name: 'Lease', component: Lease,
+    { path: '/leases/leases', name: 'Leases', component: Leases,
+    beforeRouteEnter: checkAuth },
+    { path: '/leases/lease/new', name: 'LeaseNew', component: Lease, props:true,
+    beforeRouteEnter: checkAuth },
+    { path: '/leases/lease/:id', name: 'LeaseEdit', component: Lease, props:true,
     beforeRouteEnter: checkAuth },
     { path: '/accounts/balance', name: 'Balance', component: Balance,
     beforeRouteEnter: checkAuth },

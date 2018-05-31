@@ -85,15 +85,16 @@ import Unit from './unit';
     },
     computed: {
         units() {
-          let statLOV = this.$store.getters['stationModule/stationsLOV'];
-          console.log('statlov=',statLOV)
-          let runits = [];
+          let statLOV = this.$store.getters['stationModule/allStations'];
+          let remodeledUnits = [];
           if(statLOV) {
               this.$store.getters['unitModule/allUnits'].forEach( u => {
-                    let item = { ...u, stationName: statLOV.find( x => {return x.id = u.stationID} ).name }
-                    runits.push(item);
+                    let stationName = statLOV.find( (station) => {return station.id === u.stationID} ).name;
+                    let item = { ...u, stationName: stationName }
+                    item.isVacant = (item.isVacant) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
+                    remodeledUnits.push(item);
                 });
-              return runits;
+              return remodeledUnits;
           }
           else
           return this.$store.getters['unitModule/allUnits']

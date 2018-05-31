@@ -137,23 +137,6 @@ export const stationModule = {
           },
           loadedStationsHC(state){
             return state.loadedStationsHC;
-          },
-          stationsLOV(state){
-            if(!state.loadedStations) {
-              dispatch('loadStations').then( res => {
-                return state.stationsLOV;
-              })
-            }else if(state.loadedStationsChanged){
-                          let lov = [];
-                          this.state.loadedStations.array.forEach(element => {
-                              lov.push({ id: element.id, name: element.name });
-                          });
-                          lov.sort( (a,b) => {return a.name > b.name})
-                          dispatch('setStationsLOV', lov).then ( res=>{
-                            return state.stationsLOV;
-                          })
-            }
-            else return state.stationsLOV;
           }
       }
   }
