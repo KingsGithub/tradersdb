@@ -36,7 +36,7 @@
                        <v-flex xs12 sm4>
                         <v-select  @input="hasChanged" prepend-icon="commute" name="stationsLOV"  :disabled="isFormDisabled"
                           :items="stationsLOV"
-                          v-model="unitCopy.stationID"
+                          v-model="unitCopy.stationId"
                           item-text="name"
                           item-value="id"
                           label="Station"

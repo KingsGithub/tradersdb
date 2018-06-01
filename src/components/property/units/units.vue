@@ -89,7 +89,7 @@ import Unit from './unit';
           let remodeledUnits = [];
           if(statLOV) {
               this.$store.getters['unitModule/allUnits'].forEach( u => {
-                    let stationName = statLOV.find( (station) => {return station.id === u.stationID} ).name;
+                    let stationName = statLOV.find( (station) => {return station.id === u.stationId} ).name;
                     let item = { ...u, stationName: stationName }
                     item.isVacant = (item.isVacant) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
                     remodeledUnits.push(item);

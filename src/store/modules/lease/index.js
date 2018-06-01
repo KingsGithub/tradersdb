@@ -10,15 +10,15 @@ export const leaseModule = {
             effectiveDate: '31-12-2017',
             traderId : '23',
             unitId : '21',
-            stationID:'xyz',
+            stationId:'xyz',
             occupationStartDate:'31-12-2017',
             rental: 2345.00,
-            durationYears: 3,
             durationYears: 3,
             endDate: '31-12-2020',
             paymentPeriod: "monthly",
             hasNotes:false,
-            hasPayments:false
+            hasPayments:false,
+            isActive:false
         },
         loadedLeases: [],
         loadedLeasesHC:[{
@@ -27,7 +27,7 @@ export const leaseModule = {
             effectiveDate: '31-12-2017',
             traderId : '',
             unitId : '',
-            stationID:'',
+            stationId:'',
             occupationStartDate:'31-12-2017',
             rental: 1235.00,
             durationYears: 3,
@@ -103,7 +103,7 @@ export const leaseModule = {
                           effectiveDate:obj[key].effectiveDate ,
                           traderId :obj[key].traderId ,
                           unitId :obj[key].unitId ,
-                          stationID:obj[key].stationID,
+                          stationId:obj[key].stationId,
                           occupationStartDate:obj[key].occupationStartDate,
                           rental:obj[key].rental,
                           durationYears:obj[key].durationYears ,
@@ -125,9 +125,10 @@ export const leaseModule = {
           },
           getters: {
               allLeases( state ){
-                return state.loadedLeases.sort ( (leaseA, leaseB) => {
-                              return leaseA.name > leaseB.name;
-                        })
+                return state.loadedLeases;
+                // .sort ( (leaseA, leaseB) => {
+                //               return leaseA.name > leaseB.name;
+                //         })
               },
               getLeaseById: state => (id) => {
                 return state.loadedLeases.find(lease => lease.id === id); },

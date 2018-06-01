@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import 'babel-polyfill'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import {store} from './store/index'
@@ -12,6 +13,7 @@ import Alert from './components/shared/alert.vue'
 import SnackBar from './components/shared/snackbar.vue'
 import BusyWait from './components/shared/busyWait.vue'
 import Dialog from './components/shared/dialog.vue'
+import DDate from './components/shared/date.vue'
 
 Vue.use(Vuetify, {
   theme: {
@@ -30,6 +32,7 @@ Vue.component('app-alert', Alert)
 Vue.component('app-snackbar', SnackBar)
 Vue.component('app-busywait', BusyWait)
 Vue.component('app-dialog',Dialog)
+Vue.component('app-date',DDate)
 
 /* eslint-disable no-new */
 

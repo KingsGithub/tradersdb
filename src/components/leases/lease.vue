@@ -8,7 +8,7 @@
         </v-snackbar>
         <v-card-title primary-title>
           <div>
-            <h3>lease View and Edit page</h3>
+            <h3>Lease View and Edit page</h3>
           </div>
         </v-card-title>
           <v-card-text>
@@ -17,42 +17,38 @@
                   <v-text-field type = "hidden" name="id" :id="leaseCopy.id"></v-text-field>
                   <v-layout row wrap class="light-text">
                       <v-flex xs4>
-                        <v-text-field @input="hasChanged"  prepend-icon="store" name="leaseNumber" label="lease Number"
+                        <v-text-field @input="hasChanged"  prepend-icon="folder" name="leaseNumber" label="lease Number"
                                       :disabled="isFormDisabled" v-model="leaseCopy.leaseNumber"  required :rules="[rules.required]"
                                       >{{leaseCopy.leaseNumber}}
                         </v-text-field>
                       </v-flex>
                   </v-layout>
                   <v-layout row wrap class="light-text">
-                       <v-flex xs12 sm4>
-                        <v-select  @input="hasChanged" prepend-icon="commute" name="stationsLOV"  :disabled="isFormDisabled"
+                       <v-flex xs12 sm3>
+                        <v-select  @input="hasChanged" prepend-icon="commute" name="stationsLOV"  required :rules="[rules.required]"  :disabled="isFormDisabled"
                           :items="stationsLOV"
-                          v-model="leaseCopy.stationID"
+                          v-model="leaseCopy.stationId"
                           item-text="name"
                           item-value="id"
                           label="Station"
                           autocomplete
                         ></v-select>
                       </v-flex>
-                  </v-layout>
-                  <v-layout row wrap class="light-text">
-                       <v-flex xs12 sm4>
-                        <v-select  @input="hasChanged" prepend-icon="commute" name="tradersLOV"  :disabled="isFormDisabled"
+                       <v-flex xs12 sm3  class="ml-4">
+                        <v-select  @input="hasChanged" prepend-icon="person" name="tradersLOV"  required :rules="[rules.required]"  :disabled="isFormDisabled"
                           :items="tradersLOV"
-                          v-model="leaseCopy.traderID"
-                          item-text="name"
+                          v-model="leaseCopy.traderId"
+                          item-text="traderName"
                           item-value="id"
                           label="Trader"
                           autocomplete
                         ></v-select>
                       </v-flex>
-                  </v-layout>
-                  <v-layout row wrap class="light-text">
-                       <v-flex xs12 sm4>
-                        <v-select  @input="hasChanged" prepend-icon="commute" name="unitsLOV"  :disabled="isFormDisabled"
+                       <v-flex xs12 sm3 class="ml-4">
+                        <v-select  @input="hasChanged" prepend-icon="store" name="unitsLOV"  required :rules="[rules.required]"  :disabled="isFormDisabled"
                           :items="unitsLOV"
-                          v-model="leaseCopy.unitID"
-                          item-text="name"
+                          v-model="leaseCopy.unitId"
+                          item-text="unitNumber"
                           item-value="id"
                           label="Unit"
                           autocomplete
@@ -60,51 +56,61 @@
                       </v-flex>
                   </v-layout>
                   <v-layout>
-                      <v-flex xs4 >
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="calendar" name="occupationStartDate" label="StartDate"
-                          disabled v-model="leaseCopy.occupationStartDate" required :rules="[rules.required]">
+                    <v-flex xs3  :disabled="isFormDisabled" @input="hasChanged">
+                      <!-- <v-text-field @click.native label="Start Date"> -->
+
+                    <date-picker  label="Start Date"  :disabled="isFormDisabled" @input="hasChanged" lang="eng" editable v-model="leaseCopy.occupationStartDate"> </date-picker>
+
+                    <!-- <app-date label="Start Date" :disabled="isFormDisabled" ></app-date> -->
+                    <!-- </v-text-field> -->
+                    </v-flex>
+                      <v-flex xs3 >
+                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="occupationStartDate" label="StartDate"
+                           :disabled="isFormDisabled" v-model="leaseCopy.occupationStartDate" required :rules="[rules.required]">
                             {{leaseCopy.occupationStartDate}}</v-text-field>
                       </v-flex>
-                      <v-flex xs4 >
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="calendar" name="effectiveDate" label="Effective Date"
-                          disabled v-model="leaseCopy.effectiveDate" required :rules="[rules.required]">
+                      <v-flex xs3  class="ml-5">
+                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="effectiveDate" label="Effective Date"
+                           :disabled="isFormDisabled" v-model="leaseCopy.effectiveDate" required :rules="[rules.required]">
                             {{leaseCopy.effectiveDate}}</v-text-field>
                       </v-flex>
-                      <v-flex xs4 >
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="calendar" name="endDate" label="End Date"
-                          disabled v-model="leaseCopy.endDate" required :rules="[rules.required]">
+                      <v-flex xs3  class="ml-4">
+                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="endDate" label="End Date"
+                           :disabled="isFormDisabled" v-model="leaseCopy.endDate" required :rules="[rules.required]">
                             {{leaseCopy.endDate}}</v-text-field>
                       </v-flex>
-                       <v-flex xs2>
-                        <v-text-field class="ml-4"  xs3 @input="hasChanged" prepend-icon="store" name="rental" label="Rental Amount"
-                            hint="Rental Amount"
-                            disabled v-model="leaseCopy.rental">{{leaseCopy.rental}}</v-text-field>
-                       </v-flex>
                   </v-layout>
                   <v-layout>
-                       <v-flex xs4>
-                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="duartionYears" label="duration Years"
+                       <v-flex xs3>
+                        <v-text-field  @input="hasChanged" prepend-icon="event" name="duartionYears" label="Duration Years"
                             hint="Duration Years"
-                            disabled v-model="leaseCopy.durationYears"  required :rules="[rules.required]" >
+                             :disabled="isFormDisabled" v-model="leaseCopy.durationYears"  required :rules="[rules.required]" >
                             {{leaseCopy.durationYears}}</v-text-field>
                        </v-flex>
-                       <v-flex>
-                        <v-text-field xs8 class="ml-4" @input="hasChanged" prepend-icon="store" name="paymentPeriod" label="Payment Period"
-                            hint="Classification of property involved"
-                            disabled v-model="leaseCopy.paymentPeriod"  required :rules="[rules.required]"
-                            >{{leaseCopy.paymentPeriod}}</v-text-field>
+                       <v-flex xs3 class="ml-4">
+                        <v-text-field   xs3 @input="hasChanged" prepend-icon="attach_money"  required :rules="[rules.required]" name="rental" label="Rental Amount"
+                            hint="Rental Amount"
+                             :disabled="isFormDisabled" v-model="leaseCopy.rental">{{leaseCopy.rental}}</v-text-field>
                        </v-flex>
+                       <v-flex xs3 sm3 class="ml-4">
+                          <v-select  @input="hasChanged" prepend-icon="event" name="paymentPeriod"  required  :rules="[rules.required]" :disabled="isFormDisabled"
+                            :items="paymentPeriodLOV"
+                            v-model="leaseCopy.paymentPeriod"
+                            label="Payment Period"
+                            autocomplete
+                          ></v-select>
+                      </v-flex>
                   </v-layout>
                     <v-layout row wrap class="light-text mb-2">
-                        <v-flex>
+                       <v-flex xs3 >
                         <v-switch  @click="hasChangedChkBox($event)" color="green" name="hasNotes" label="Has Notes"
                                   :disabled="isFormDisabled" v-model="leaseCopy.hasNotes"></v-switch>
                         </v-flex>
-                        <v-flex>
+                       <v-flex xs3 class="ml-4">
                         <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasPayments" label="Has Payments"
-                                    :disabled="isFormDisabled" v-model="leaseCopy.hasWashbasin"></v-switch>
+                                    :disabled="isFormDisabled" v-model="leaseCopy.hasPayments"></v-switch>
                         </v-flex>
-                        <v-flex>
+                       <v-flex xs3 class="ml-4">
                         <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="isActive" label="Active? "
                                     :disabled="isFormDisabled" v-model="leaseCopy.isActive"></v-switch>
                         </v-flex>
@@ -126,13 +132,17 @@
   </v-layout>
 </template>
 <script>
+
 import Dialog from '../shared/dialog'
+import DatePicker from 'vue2-datepicker'
+
 export default {
 
    props: ['id'],
 
    components:{
-      appDialog:Dialog
+      appDialog:Dialog,
+      DatePicker
    },
     data(){
         return {
@@ -140,12 +150,14 @@ export default {
           leaseDBCopy : {},
           formIsModified:false,
           snackbar: false,
+          paymentPeriodLOV: ['Weekly', 'Monthly', 'Per Annum'],
           snackbartext:'',
           timeoutt:2500,
           yposition:true,
           message:"Form has changed. Cancel Edits?",
           heading:"Confirm Cancel",
           showDialog: false,
+          menu2:false,
           rules: {
             required: (value) => !!value || 'Required.',
             email: (value) => {
@@ -166,14 +178,20 @@ export default {
           return this.$store.getters['unitModule/allUnits'];
       },
       tradersLOV(){
-          return this.$store.getters['traderModule/allTraders'];
+          let traders = this.$store.getters['traderModule/allTraders'];
+          let remodeledTraders = [];
+              traders.forEach( u => {
+                    u = { ...u, traderName: u.firstname+" "+u.surname}
+                    remodeledTraders.push(u);
+                });
+              return remodeledTraders;
       },
       leaseCopy(){
         let lease = '';
         if(this.id === '0')
-            lease = { ...this.$store.getters['leaseModule/newlease'] };  // copy the template
+            lease = { ...this.$store.getters['leaseModule/newLease'] };  // copy the template
          else {
-            lease = { ...this.$store.getters['leaseModule/selectedlease'](this.id) }// copy the actual existing lease for editing.
+            lease = { ...this.$store.getters['leaseModule/selectedLease'](this.id) }// copy the actual existing lease for editing.
          }
          this.leaseDBCopy = lease;
          return this.leaseDBCopy;
@@ -237,7 +255,7 @@ export default {
         // Need to save this here. What does that mean?
         if(this.formIsModified) {
           this.$store.dispatch('clearError',{root:true});
-          if(this.leaseCopy.id === '0') {
+          if(this.id === '0') {
               this.$store.dispatch('leaseModule/insertLease', this.leaseCopy, {root:true})
                   .then( result => {
                     if(this.$store.getters.error){
@@ -256,7 +274,7 @@ export default {
                           this.showSnackBar(error.message);
                       }
                       else {
-                        this.showSnackBar('Saved.');
+                        this.showSnackBar('Updated.');
                         this.formIsModified = false;
                       }
               })
