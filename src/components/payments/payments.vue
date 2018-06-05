@@ -10,7 +10,7 @@
       <v-card v-if="!loading">
         <v-card-title primary-title>
           <div>
-            <h3>Lease List Page     <small class="orange--text">[click row to edit]</small></h3>
+            <h3>Payment List Page     <small class="orange--text">[click row to edit]</small></h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -24,14 +24,14 @@
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="leases"
+            :items="payments"
             :search="search"
             hide-actions
             :loading="loading"
             class="elevation-1"
           >
             <template slot="items" slot-scope="props" >
-              <tr   @click="editLease(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
+              <tr   @click="editPayment(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
               <td class="text-xs-left">{{ props.item.stationName }}</td>
               <td class="text-xs-left">{{ props.item.traderName }}</td>
               <td class="text-xs-left">{{ props.item.unitName }}</td>
@@ -41,7 +41,7 @@
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
-                <appLease :lease="props.item" :expanded="props.expanded"></appLease>
+                <appPayment :payment="props.item" :expanded="props.expanded"></appPayment>
             </template>
           </v-data-table>
           <v-card-actions>
@@ -54,29 +54,29 @@
   </v-layout>
 </template>
 <script>
-import Lease from './lease';
+import Payment from './payment';
   export default {
     components:{
-      appLease:Lease
+      appPayment:Payment
     },
     methods:{
-      editLeaseOLD(props) {
+      editPaymentOLD(props) {
         props.expanded = !props.expanded;
       },
       closeForm() {
         this.$router.push('/')
       },
-      editLease(editLease){
-          this.$router.push('/leases/lease/'+editLease.id )
+      editPayment(editPayment){
+          this.$router.push('/payments/payment/'+editPayment.id )
       },
       createNew(){
-        this.$router.push('/leases/lease/0'); //testing git
+        this.$router.push('/payments/payment/0'); //testing git
       }
     },
     data () {
       return {
         search:'',
-        newLease: {},
+        newPayment: {},
         headers: [
           { text: 'Station ', value: 'stationName', align: 'left' },
           { text: 'Trader', value: 'traderName' },
@@ -88,42 +88,42 @@ import Lease from './lease';
       }
     },
     computed: {
-        leases() {
+        payments() {
           let stationsLOV = this.$store.getters['stationModule/allStations'];
           let unitsLOV = this.$store.getters['unitModule/allUnits'];
           let tradersLOV = this.$store.getters['traderModule/allTraders'];
-          let remodeledLeases = [];
+          let remodeledPayments = [];
           let stationName = '';
           let t = '';
           let unitName = '';
           let traderName = '';
           if(stationsLOV) {
-              const leases = this.$store.getters['leaseModule/allLeases'];
-              leases.forEach( lease => {
-                    stationName = stationsLOV.find( (station) => {return station.id === lease.stationId} ).name;
-                    t = tradersLOV.find( (trader) => {return trader.id === lease.traderId} );
+              const payments = this.$store.getters['paymentModule/allPayments'];
+              payments.forEach( payment => {
+                    stationName = stationsLOV.find( (station) => {return station.id === payment.stationId} ).name;
+                    t = tradersLOV.find( (trader) => {return trader.id === payment.traderId} );
                     if(t) { traderName = t.firstname + ' ' + t.surname } else traderName = 'Not Found';
-                    let unit = unitsLOV.find( (unit) => {return unit.id === lease.unitId} );
+                    let unit = unitsLOV.find( (unit) => {return unit.id === payment.unitId} );
                     unitName = unit.unitNumber;
 
-                    let item = { ...lease, stationName: stationName, traderName: traderName, unitName: unitName }
+                    let item = { ...payment, stationName: stationName, traderName: traderName, unitName: unitName }
 
                     item.hasNotes = (item.hasNotes) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
                     item.hasPayments = (item.hasPayments) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
-                    remodeledLeases.push(item);
+                    remodeledPayments.push(item);
                 });
-              return remodeledLeases;
+              return remodeledPayments;
           }
           else
-          return this.$store.getters['leaseModule/allLeases']
+          return this.$store.getters['paymentModule/allPayments']
         },
         loading(){
           return this.$store.getters.loading
         }
       },
       created(){
-        if (!this.$store.getters.allLeases)
-          this.$store.dispatch('leaseModule/loadLeases');
+        if (!this.$store.getters.allPayments)
+          this.$store.dispatch('paymentModule/loadPayments');
       }
   }
 </script>

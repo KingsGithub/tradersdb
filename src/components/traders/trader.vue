@@ -103,15 +103,15 @@
                     <v-layout row wrap class="light-text mb-2">
                         <v-flex>
                         <!-- <v-checkbox left @input="hasChanged"   name="hasLeaseApplicationForm" :label="`Has Lease Docs: ${traderCopy.hasLeaseApplicationForm.toString()}`" :disabled="isFormDisabled" v-model="traderCopy.hasLeaseApplicationForm"></v-checkbox> -->
-                        <v-switch  @click="hasChangedChkBox($event)" color="green" name="hasLeaseApplicationForm" label="Has Lease Docs:"
+                        <v-switch  @change="hasChanged" color="orange" name="hasLeaseApplicationForm" label="Has Lease Docs:"
                         :disabled="isFormDisabled" v-model="traderCopy.hasLeaseApplicationForm"></v-switch>
                         </v-flex>
                         <v-flex>
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasMarriageCertificate" label="Has Marriage Cert:"
+                        <v-switch   @change="hasChanged" color="orange"  name="hasMarriageCertificate" label="Has Marriage Cert:"
                         :disabled="isFormDisabled" v-model="traderCopy.hasMarriageCertificate"></v-switch>
                         </v-flex>
                         <v-flex>
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasProofOfAddress" label="Has Proof of Address: "
+                        <v-switch   @change="hasChanged" color="orange"  name="hasProofOfAddress" label="Has Proof of Address: "
                         :disabled="isFormDisabled" v-model="traderCopy.hasProofOfAddress"></v-switch>
                         </v-flex>
                     </v-layout>
@@ -120,11 +120,11 @@
               </v-card-text>
         <v-card-actions xs12 md6 sm6 offset-sm3 >
               <v-spacer></v-spacer>
-              <v-btn v-if="hasEditPermission" flat color="orange" @click="doEdit">Edit</v-btn>
-              <v-btn flat color="orange" @click="doCancel">Cancel</v-btn>
-              <v-btn flat color="orange" @click="doSave">Save</v-btn>
-              <v-btn flat color="orange" @click="doClose">Close</v-btn>
-              <!-- <v-btn flat color="orange" @click="loadtradersHC">LoadHC</v-btn> -->
+              <v-btn v-if="hasEditPermission" dark color="orange" @click="doEdit">Edit</v-btn>
+              <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
+              <v-btn dark color="orange" @click="doSave">Save</v-btn>
+              <v-btn dark color="orange" @click="doClose">Close</v-btn>
+              <!-- <v-btn dark color="orange" @click="loadtradersHC">LoadHC</v-btn> -->
         </v-card-actions>
           <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
@@ -179,6 +179,7 @@ export default {
       },
       hasChangedChkBox(event){
         this.formIsModified = true
+        console.log('trader hasChangedChkBox - formisfmodified=', this.formIsModified)
       },
       doEdit(){
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
@@ -239,7 +240,7 @@ export default {
                           this.showSnackBar(error.message);
                       }
                       else {
-                        this.showSnackBar('Saved.');
+                        this.showSnackBar('Updated.');
                         this.formIsModified = false;
                       }
               })

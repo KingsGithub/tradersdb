@@ -10,9 +10,9 @@
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat color="orange">Edit</v-btn>
-          <v-btn flat color="orange">Cancel</v-btn>
-          <v-btn flat color="orange">Close</v-btn>
+          <v-btn dark color="orange">Edit</v-btn>
+          <v-btn dark color="orange">Cancel</v-btn>
+          <v-btn dark color="orange">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

@@ -5,10 +5,18 @@ export const traderModule = {
       namespaced:true,
       state: {
         traderTemplate:{
-          id:'0', firstname:'', surname:'', email:'', cellphone:'', address:'',
-          hasLeaseApplicationForm: false, hasProofOfAddress:false, idNumber: '', commodity:'',
-          city :'Cape Town',  province :'Western Cape',  postalCode :'8001', country :'South Africa',
-               company :'', personType :'Trader'
+          id:'0', firstname:'', surname:'', email:'', cellphone:'', streetAddress:'',
+          hasLeaseApplicationForm: false,
+          hasProofOfAddress:false,
+          hasMarriageCertificate :false,
+          idNumber: '',
+          commodity:'',
+          city :'Cape Town',
+          province :'Western Cape',
+          postalCode :'8001',
+          country :'South Africa',
+          company :'',
+          personType :'Trader'
         },
           currentTrader: {
             id :0,

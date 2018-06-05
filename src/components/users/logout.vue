@@ -10,7 +10,7 @@
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat color="orange" @click="logout">Logout</v-btn>
+          <v-btn dark color="orange" @click="logout">Logout</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

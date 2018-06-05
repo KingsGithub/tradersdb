@@ -39,11 +39,11 @@
               </v-card-text>
         <v-card-actions xs12 md6 sm6 offset-sm3 >
               <v-spacer></v-spacer>
-              <v-btn v-if="hasEditPermission" flat color="orange" @click="doEdit">Edit</v-btn>
-              <v-btn flat color="orange" @click="doCancel">Cancel</v-btn>
-              <v-btn flat color="orange" @click="doSave">Save</v-btn>
-              <v-btn flat color="orange" @click="doClose">Close</v-btn>
-              <!-- <v-btn flat color="orange" @click="loadstationsHC">LoadHC</v-btn> -->
+              <v-btn v-if="hasEditPermission" dark color="orange" @click="doEdit">Edit</v-btn>
+              <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
+              <v-btn dark color="orange" @click="doSave">Save</v-btn>
+              <v-btn dark color="orange" @click="doClose">Close</v-btn>
+              <!-- <v-btn dark color="orange" @click="loadstationsHC">LoadHC</v-btn> -->
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>

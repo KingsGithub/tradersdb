@@ -55,29 +55,28 @@
                         ></v-select>
                       </v-flex>
                   </v-layout>
-                  <v-layout>
-                    <v-flex xs3  :disabled="isFormDisabled" @input="hasChanged">
-                      <!-- <v-text-field @click.native label="Start Date"> -->
-
-                    <date-picker  label="Start Date"  :disabled="isFormDisabled" @input="hasChanged" lang="eng" editable v-model="leaseCopy.occupationStartDate"> </date-picker>
-
-                    <!-- <app-date label="Start Date" :disabled="isFormDisabled" ></app-date> -->
-                    <!-- </v-text-field> -->
+                  <v-layout row wrap>
+                    <!-- <date-picker  label="Start Date"  :disabled="isFormDisabled" @input="hasChanged" lang="eng" editable v-model="leaseCopy.occupationStartDate"> </date-picker> -->
+                    <v-flex xs3 >
+                        <app-date :rules="[rules.required]" label="Start Date" :disabled="isFormDisabled" @input="hasChanged"
+                                   v-model="leaseCopy.occupationStartDate"  :value="leaseCopy.occupationStartDate" >
+                        </app-date>
                     </v-flex>
-                      <v-flex xs3 >
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="occupationStartDate" label="StartDate"
-                           :disabled="isFormDisabled" v-model="leaseCopy.occupationStartDate" required :rules="[rules.required]">
-                            {{leaseCopy.occupationStartDate}}</v-text-field>
-                      </v-flex>
-                      <v-flex xs3  class="ml-5">
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="effectiveDate" label="Effective Date"
+                    <v-flex xs3   class="ml-4">
+                        <app-date :rules="[rules.required]" label="Effective Date" :disabled="isFormDisabled" @input="hasChanged"
+                                   v-model="leaseCopy.effectiveDate"  :value="leaseCopy.effectiveDate" >
+                        </app-date>
+                          <!-- <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="effectiveDate" label="Effective Date"
                            :disabled="isFormDisabled" v-model="leaseCopy.effectiveDate" required :rules="[rules.required]">
-                            {{leaseCopy.effectiveDate}}</v-text-field>
+                            {{leaseCopy.effectiveDate}}</v-text-field> -->
                       </v-flex>
                       <v-flex xs3  class="ml-4">
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="endDate" label="End Date"
+                        <app-date :rules="[rules.required]" label="End Date" :disabled="isFormDisabled" @input="hasChanged"
+                                   v-model="leaseCopy.endDate"  :value="leaseCopy.endDate" >
+                        </app-date>
+                          <!-- <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="endDate" label="End Date"
                            :disabled="isFormDisabled" v-model="leaseCopy.endDate" required :rules="[rules.required]">
-                            {{leaseCopy.endDate}}</v-text-field>
+                            {{leaseCopy.endDate}}</v-text-field> -->
                       </v-flex>
                   </v-layout>
                   <v-layout>
@@ -103,15 +102,15 @@
                   </v-layout>
                     <v-layout row wrap class="light-text mb-2">
                        <v-flex xs3 >
-                        <v-switch  @click="hasChangedChkBox($event)" color="green" name="hasNotes" label="Has Notes"
+                        <v-switch  @change="hasChanged" color="green" name="hasNotes" label="Has Notes"
                                   :disabled="isFormDisabled" v-model="leaseCopy.hasNotes"></v-switch>
                         </v-flex>
                        <v-flex xs3 class="ml-4">
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasPayments" label="Has Payments"
+                        <v-switch   @change="hasChanged" color="green"  name="hasPayments" label="Has Payments"
                                     :disabled="isFormDisabled" v-model="leaseCopy.hasPayments"></v-switch>
                         </v-flex>
                        <v-flex xs3 class="ml-4">
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="isActive" label="Active? "
+                        <v-switch   @change="hasChanged" color="green"  name="isActive" label="Active? "
                                     :disabled="isFormDisabled" v-model="leaseCopy.isActive"></v-switch>
                         </v-flex>
                     </v-layout>
@@ -120,11 +119,11 @@
               </v-card-text>
         <v-card-actions xs12 md6 sm6 offset-sm3 >
               <v-spacer></v-spacer>
-              <v-btn v-if="hasEditPermission" flat color="orange" @click="doEdit">Edit</v-btn>
-              <v-btn flat color="orange" @click="doCancel">Cancel</v-btn>
-              <v-btn flat color="orange" @click="doSave">Save</v-btn>
-              <v-btn flat color="orange" @click="doClose">Close</v-btn>
-              <v-btn flat color="orange" @click="loadleasesHC">LoadHC</v-btn>
+              <v-btn v-if="hasEditPermission" dark color="orange" @click="doEdit">Edit</v-btn>
+              <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
+              <v-btn dark color="orange" @click="doSave">Save</v-btn>
+              <v-btn dark color="orange" @click="doClose">Close</v-btn>
+              <v-btn dark color="orange" @click="loadleasesHC">LoadHC</v-btn>
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>

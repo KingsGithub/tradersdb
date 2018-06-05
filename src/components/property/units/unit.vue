@@ -78,19 +78,19 @@
                   </v-layout>
                     <v-layout row wrap class="light-text mb-2">
                         <v-flex>
-                        <v-switch  @click="hasChangedChkBox($event)" color="green" name="hasFireExtinguisher" label="Has Fire Extinguisher:"
+                        <v-switch @change="hasChanged"  color="green" name="hasFireExtinguisher" label="Has Fire Extinguisher:"
                                   :disabled="isFormDisabled" v-model="unitCopy.hasFireExtinguisher"></v-switch>
                         </v-flex>
                         <v-flex>
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasWashbasin" label="Has Washbasin:"
+                        <v-switch @change="hasChanged"    color="green"  name="hasWashbasin" label="Has Washbasin:"
                                     :disabled="isFormDisabled" v-model="unitCopy.hasWashbasin"></v-switch>
                         </v-flex>
                         <v-flex>
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="isVacant" label="Is Vacant: "
+                        <v-switch  @change="hasChanged"  color="green"  name="isVacant" label="Is Vacant: "
                                     :disabled="isFormDisabled" v-model="unitCopy.isVacant"></v-switch>
                         </v-flex>
                         <v-flex>
-                        <v-switch   @click="hasChangedChkBox($event)"  color="green"  name="hasStorage" label="Has Storage: "
+                        <v-switch  @change="hasChanged"   color="green"  name="hasStorage" label="Has Storage: "
                                     :disabled="isFormDisabled" v-model="unitCopy.hasStorage"></v-switch>
                         </v-flex>
                     </v-layout>
@@ -99,11 +99,11 @@
               </v-card-text>
         <v-card-actions xs12 md6 sm6 offset-sm3 >
               <v-spacer></v-spacer>
-              <v-btn v-if="hasEditPermission" flat color="orange" @click="doEdit">Edit</v-btn>
-              <v-btn flat color="orange" @click="doCancel">Cancel</v-btn>
-              <v-btn flat color="orange" @click="doSave">Save</v-btn>
-              <v-btn flat color="orange" @click="doClose">Close</v-btn>
-              <v-btn flat color="orange" @click="loadunitsHC">LoadHC</v-btn>
+              <v-btn v-if="hasEditPermission" dark color="orange" @click="doEdit">Edit</v-btn>
+              <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
+              <v-btn dark color="orange" @click="doSave">Save</v-btn>
+              <v-btn dark color="orange" @click="doClose">Close</v-btn>
+              <v-btn dark color="orange" @click="loadunitsHC">LoadHC</v-btn>
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
@@ -169,6 +169,7 @@ export default {
       },
       hasChangedChkBox(event){
         this.formIsModified = true
+        console.log('unit chkbox change=', this.formIsModified)
       },
       doEdit(){
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
@@ -236,7 +237,7 @@ export default {
                           this.showSnackBar(error.message);
                       }
                       else {
-                        this.showSnackBar('Saved.');
+                        this.showSnackBar('Updated.');
                         this.formIsModified = false;
                       }
               })

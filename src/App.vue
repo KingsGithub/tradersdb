@@ -98,7 +98,7 @@ export default {
                   { icon: 'commute', title: 'Stations', link: '/property/stations/stations', tooltip:'View and edit Stations'},
                   { icon: 'store', title: 'Units', link: '/property/units/units', tooltip:'View and edit Units'},
                   { icon: 'file_copy', title: 'Leases', link: '/leases/leases', tooltip:'View and edit Leases'},
-                  { icon: 'receipt', title: 'Payments', link: '/payments/payment', tooltip:'View and edit Payments'},
+                  { icon: 'receipt', title: 'Payments', link: '/payments/payments', tooltip:'View and edit Payments'},
                   { icon: 'account_balance', title: 'Accounts', link: '/accounts/balance', tooltip:'View and edit Balances'},
                   { icon: 'account_box', title: 'Users', link: '/users/user', tooltip:'View and edit User Profiles'},
                   { icon: 'person', title: 'Logout', link: '/users/logout', tooltip:'Logout'}

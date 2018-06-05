@@ -10,7 +10,7 @@
       <v-card v-if="!loading">
         <v-card-title primary-title>
           <div>
-            <h3>Station List Page     <small class="orange--text">[click row to edit]</small></h3>
+            <h3>Note List Page     <small class="orange--text">[click row to edit]</small></h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -24,21 +24,21 @@
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="stations"
+            :items="notes"
             :search="search"
             hide-actions
             :loading="loading"
             class="elevation-1"
           >
             <template slot="items" slot-scope="props" >
-              <tr   @click="editStation(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
-              <td class="text-xs-left">{{ props.item.name }}</td>
-              <td class="text-xs-left">{{ props.item.address }}</td>
-              <td class="text-xs-left">{{ props.item.phone }}</td>
+              <tr   @click="editNote(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
+              <td class="text-xs-left">{{ props.item.leaseNumber }}</td>
+              <td class="text-xs-left">{{ props.item.dateCreated }}</td>
+              <td class="text-xs-left">{{ props.item.text }}</td>
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
-                <appStation :station="props.item" :expanded="props.expanded"></appStation>
+                <appNote :note="props.item" :expanded="props.expanded"></appNote>
             </template>
           </v-data-table>
           <v-card-actions>
@@ -51,47 +51,60 @@
   </v-layout>
 </template>
 <script>
-import Station from './station';
+import Note from './note';
   export default {
     components:{
-      appStation:Station
+      appNote:Note
     },
     methods:{
-      editStationOLD(props) {
+      editNoteOLD(props) {
         props.expanded = !props.expanded;
       },
       closeForm() {
         this.$router.push('/')
       },
-      editStation(editStation){
-          this.$router.push('/property/stations/station/'+editStation.id )
+      editNote(editNote){
+          this.$router.push('/notes/note/'+editNote.id )
       },
       createNew(){
-        this.$router.push('/property/stations/station/0'); //testing git
+        this.$router.push('/notes/note/0');
       }
     },
     data () {
       return {
         search:'',
-        newStation: {},
+        newNote: {},
         headers: [
-          { text: 'Station Name', value: 'name', align: 'left' },
-          { text: 'Address', value: 'address' },
-          { text: 'Phone', value: 'phone' }
+          { text: 'Lease ', value: 'leaseNumber', align: 'left' },
+          { text: 'Date', value: 'dateCreated' },
+          { text: 'Note', value: 'text' }
         ]
       }
     },
     computed: {
-        stations() {
-          return this.$store.getters['stationModule/allStations'];
+        notes() {
+          let leasesLOV = this.$store.getters['leaseModule/allLeases'];
+          let remodeledNotes = [];
+          let leaseNumber= '';
+          if(leasesLOV) {
+              const notes = this.$store.getters['noteModule/allNotes'];
+              notes.forEach( note => {
+                    leaseNumber = leasesLOV.find( (lease) => {return lease.id === note.leaseId} ).leaseNumber;
+                    let item = { ...note, leaseNumber: leaseNumber}
+                    remodeledNotes.push(item);
+                });
+              return remodeledNotes;
+          }
+          else
+          return this.$store.getters['noteModule/allNotes']
         },
         loading(){
           return this.$store.getters.loading
         }
       },
       created(){
-        if (!this.$store.getters.allStations)
-          this.$store.dispatch('stationModule/loadStations');
+        if (!this.$store.getters.allNotes)
+          this.$store.dispatch('noteModule/loadNotes');
       }
   }
 </script>

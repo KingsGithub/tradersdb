@@ -1,66 +1,57 @@
 <template>
-   <v-menu
-          ref="menu1"
-          :close-on-content-click="false"
-          :return-value.sync="date"
-          v-model="menu1"
-          :nudge-right="40"
-          lazy
-          transition="scale-transition"
-          offset-y
-          full-width
-          max-width="290px"
-          min-width="290px"
-        >
-          <v-text-field
-            slot="activator"
-            v-model="dateFormatted"
-            :label="label"
-            :disabled="disabled"
-            hint="DD-MM-YYYY format"
-            prepend-icon="event"
-            readonly
-            @blur="date = parseDate(dateFormatted)"
-          ></v-text-field>
-          <v-date-picker v-model="date" header-color="orange" @input="datePicked"></v-date-picker>
-        </v-menu>
+  <v-layout row wrap>
+    <v-flex>
+      <v-menu
+        ref="Menu"
+        :close-on-content-click="false"
+        v-model="dateMenu"
+        :nudge-right="40"
+        :return-value.sync="internalDate"
+        :disabled="disabled"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          v-model="internalDate"
+          :disabled="disabled"
+          :label="label"
+          prepend-icon="event"
+          readonly
+          required
+          :rules="rules"
+        ></v-text-field>
+        <v-date-picker v-model="internalDate" @input="dateChanged"></v-date-picker>
+
+      </v-menu>
+    </v-flex>
+    <v-spacer></v-spacer>
+  </v-layout>
 </template>
- <script>
+
+<script>
+
   export default {
-    props:['date','label', 'disabled', 'onModifyFunction'],
-    data: () => ({
-      dateFormatted: null,
-      menu1: false
-    }),
-
-    computed: {
-      computedDateFormatted () {
-        return this.formatDate(this.date)
+    props: {
+        value: { type: String, required:true},
+        disabled: { type: Boolean, required: true },
+        label: { type: String, required: true },
+        rules: {type:Array, required:false},
+    },
+    data () {
+       return {
+        internalDate: this.value,
+        dateMenu: false
       }
     },
-
-    watch: {
-      date (val) {
-        this.dateFormatted = this.formatDate(this.date)
-      }
-    },
-
-    methods: {
-      datePicked(){
-        $refs.menu1.save(date);
-        this.$emit('input', this.date)
-      },
-      formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${day}-${month}-${year}`
-      },
-      parseDate (date) {
-        if (!date) return null
-
-        const [month, day, year] = date.split('-')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    methods:{
+      dateChanged(){
+        this.$refs.Menu.save(this.internalDate);
+        this.dateMenu = false;
+        this.$emit('input',this.internalDate)
       }
     }
   }
