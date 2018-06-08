@@ -66,17 +66,11 @@
                         <app-date :rules="[rules.required]" label="Effective Date" :disabled="isFormDisabled" @input="hasChanged"
                                    v-model="leaseCopy.effectiveDate"  :value="leaseCopy.effectiveDate" >
                         </app-date>
-                          <!-- <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="effectiveDate" label="Effective Date"
-                           :disabled="isFormDisabled" v-model="leaseCopy.effectiveDate" required :rules="[rules.required]">
-                            {{leaseCopy.effectiveDate}}</v-text-field> -->
                       </v-flex>
                       <v-flex xs3  class="ml-4">
                         <app-date :rules="[rules.required]" label="End Date" :disabled="isFormDisabled" @input="hasChanged"
                                    v-model="leaseCopy.endDate"  :value="leaseCopy.endDate" >
                         </app-date>
-                          <!-- <v-text-field xs4 @input="hasChanged" prepend-icon="event" name="endDate" label="End Date"
-                           :disabled="isFormDisabled" v-model="leaseCopy.endDate" required :rules="[rules.required]">
-                            {{leaseCopy.endDate}}</v-text-field> -->
                       </v-flex>
                   </v-layout>
                   <v-layout>
@@ -123,7 +117,7 @@
               <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
               <v-btn dark color="orange" @click="doSave">Save</v-btn>
               <v-btn dark color="orange" @click="doClose">Close</v-btn>
-              <v-btn dark color="orange" @click="loadleasesHC">LoadHC</v-btn>
+              <!-- <v-btn dark color="orange" @click="loadleasesHC">LoadHC</v-btn> -->
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>

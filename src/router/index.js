@@ -45,9 +45,9 @@ export default new Router({
 
     { path: '/payments/payments', name: 'Payments', component: Payments,
     beforeRouteEnter: checkAuth },
-    { path: '/payments/payment/new, :leaseId', name: 'PaymentNew', component: Payment, props:true,
+    { path: '/payments/payment/new,:leaseId', name: 'PaymentNew', component: Payment, props:true,
     beforeRouteEnter: checkAuth },
-    { path: '/payments/payment/:id, :leaseId', name: 'PaymentEdit', component: Payment, props:true,
+    { path: '/payments/payment/:id,:leaseId', name: 'PaymentEdit', component: Payment, props:true,
     beforeRouteEnter: checkAuth},
 
     { path: '/property/units/units', name: 'Units', component: Units,

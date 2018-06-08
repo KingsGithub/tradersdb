@@ -8,9 +8,9 @@ export const paymentModule={
       chargeTypes:["RENTAL", "MAINTENTANCE", "REPAIRS", "DEPOSIT"],
       transactionTypes:["CASH", "EFT", "CREDIT CARD", "DEBIT CARD"],
       paymentTemplate : {
-          id:0,
-          amount:0,
-          date:'',
+          id:'0',
+          amount:'0',
+          date:'2017-12-23',
           leaseId: '0',
           referenceNumber: '',
           transactionType: "CASH",
@@ -19,8 +19,8 @@ export const paymentModule={
       loadedPayments: [],
       loadedPaymentsHC:[
         {
-          id:0,
-          amount:1900,
+          id:'0',
+          amount:'1900',
           date:'2017-12-23',
           leaseId: 'Unit-Z3-CPT-RP-2918',
           referenceNumber: 'Unit-Z3-CPT-RP-2918',
@@ -91,7 +91,7 @@ export const paymentModule={
                     payments.push({
                       id:key,
                       date :obj[key].date,
-                      amount :obj[key].paymentSize,
+                      amount :obj[key].amount,
                       leaseId :obj[key].leaseId,
                       referenceNumber :obj[key].referenceNumber,
                       transactionType : obj[key].transactionType,
@@ -132,6 +132,12 @@ export const paymentModule={
           },
           loadedPaymentsHC(state){
             return state.loadedPaymentsHC;
+          },
+          transactionTypes(state){
+            return state.transactionTypes;
+          },
+          chargeTypes(state){
+            return state.chargeTypes;
           }
       }
   }

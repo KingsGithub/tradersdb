@@ -32,12 +32,12 @@
           >
             <template slot="items" slot-scope="props" >
               <tr   @click="editPayment(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
-              <td class="text-xs-left">{{ props.item.stationName }}</td>
-              <td class="text-xs-left">{{ props.item.traderName }}</td>
-              <td class="text-xs-left">{{ props.item.unitName }}</td>
-              <td class="text-xs-left">{{ props.item.occupationStartDate }}</td>
-              <td class="text-xs-left">{{ props.item.hasNotes }}</td>
-              <td class="text-xs-left">{{ props.item.hasPayments }}</td>
+              <td class="text-xs-left">{{ props.item.leaseNumber }}</td>
+              <td class="text-xs-left">{{ props.item.referenceNumber }}</td>
+              <td class="text-xs-left">{{ props.item.date }}</td>
+              <td class="text-xs-left">{{ props.item.amount }}</td>
+              <td class="text-xs-left">{{ props.item.chargeType }}</td>
+              <td class="text-xs-left">{{ props.item.transactionType }}</td>
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
@@ -67,10 +67,10 @@ import Payment from './payment';
         this.$router.push('/')
       },
       editPayment(editPayment){
-          this.$router.push('/payments/payment/'+editPayment.id )
+          this.$router.push('/payments/payment/'+editPayment.id +',0')
       },
       createNew(){
-        this.$router.push('/payments/payment/0'); //testing git
+        this.$router.push('/payments/payment/0,0'); //testing git
       }
     },
     data () {
@@ -78,35 +78,25 @@ import Payment from './payment';
         search:'',
         newPayment: {},
         headers: [
-          { text: 'Station ', value: 'stationName', align: 'left' },
-          { text: 'Trader', value: 'traderName' },
-          { text: 'Unit No.', value: 'unitName' },
-          { text: 'StartDate', value: 'occupationStartDate' },
-          { text: 'Has Notes', value: 'hasNotes'},
-          { text: 'Has Payments', value: 'hasPayments'}
+          { text: 'Lease Number', value: 'leaseNumber'},
+          { text: 'Reference ', value: 'referenceNumber' },
+          { text: 'Date', value: 'date' },
+          { text: 'Amount', value: 'amount' },
+          { text: 'Charge Type', value: 'chargeType' },
+          { text: 'Transaction Type', value: 'transactionType' }
         ]
       }
     },
     computed: {
         payments() {
-          let unitsLOV = this.$store.getters['unitModule/allUnits'];
-          let tradersLOV = this.$store.getters['traderModule/allTraders'];
+          let leasesLOV = this.$store.getters['leaseModule/allLeases'];
           let remodeledPayments = [];
-          let t = '';
-          let unitName = '';
-          let traderName = '';
+          let leaseNumber = '';
           const payments = this.$store.getters['paymentModule/allPayments'];
           if(payments) {
                 payments.forEach( payment => {
-                    t = tradersLOV.find( (trader) => {return trader.id === payment.traderId} );
-                    if(t) { traderName = t.firstname + ' ' + t.surname } else traderName = 'Not Found';
-                    let unit = unitsLOV.find( (unit) => {return unit.id === payment.unitId} );
-                    unitName = unit.unitNumber;
-
-                    let item = { ...payment, stationName: stationName, traderName: traderName, unitName: unitName }
-
-                    item.hasNotes = (item.hasNotes) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
-                    item.hasPayments = (item.hasPayments) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
+                    leaseNumber = leasesLOV.find( (lease) => {return lease.id === payment.leaseId}).leaseNumber
+                    let item = { ...payment, leaseNumber: leaseNumber}
                     remodeledPayments.push(item);
                 });
               return remodeledPayments;

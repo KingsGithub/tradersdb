@@ -103,7 +103,7 @@
               <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
               <v-btn dark color="orange" @click="doSave">Save</v-btn>
               <v-btn dark color="orange" @click="doClose">Close</v-btn>
-              <v-btn dark color="orange" @click="loadunitsHC">LoadHC</v-btn>
+              <!-- <v-btn dark color="orange" @click="loadunitsHC">LoadHC</v-btn> -->
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
       </v-card>
