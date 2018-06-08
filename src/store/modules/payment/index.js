@@ -1,3 +1,5 @@
+import firebase from 'firebase/app';
+import 'firebase/database';
 export const paymentModule={
     namespaced: true,
 
@@ -88,18 +90,12 @@ export const paymentModule={
                 for(let key in obj) {
                     payments.push({
                       id:key,
-                      paymentNumber :obj[key].paymentNumber,
-                      paymentSize :obj[key].paymentSize,
-                      hasFireExtinguisher :obj[key].hasFireExtinguisher,
-                      hasStorage :obj[key].hasStorage,
-                      hasWashbasin : obj[key].hasWashbasin,
-                      isVacant :obj[key].isVacant,
-                      stationId: obj[key].stationId,
-                      address :obj[key].address,
-                      city :obj[key].city,
-                      province :obj[key].province,
-                      postalCode :obj[key].postalCode,
-                      propertyType :obj[key].propertyType
+                      date :obj[key].date,
+                      amount :obj[key].paymentSize,
+                      leaseId :obj[key].leaseId,
+                      referenceNumber :obj[key].referenceNumber,
+                      transactionType : obj[key].transactionType,
+                      chargeType :obj[key].chargeType
                     })
                 };
                 commit('loadPayments',payments);

@@ -12,15 +12,11 @@ import { leaseModule } from './modules/lease'
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-  modules: { traderModule, stationModule, unitModule, leaseModule },
+  modules: { traderModule, stationModule, unitModule, leaseModule, paymentModule },
   state: {
       error:null,
       user:null,
-      // {
-      //   id: '',
-      //   permissions: [],
-      //   accessToken : ''
-      // },
+      // { id: '', permissions: [], accessToken : ''},
       loading:false,
       dialog: false
   },

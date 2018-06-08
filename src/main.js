@@ -47,5 +47,6 @@ new Vue({
     this.$store.dispatch('unitModule/loadUnits')
     this.$store.dispatch('traderModule/loadTraders')
     this.$store.dispatch('leaseModule/loadLeases')
+    this.$store.dispatch('paymentModule/loadPayments')
   }
 })

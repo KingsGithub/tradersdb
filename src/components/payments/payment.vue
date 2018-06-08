@@ -133,15 +133,13 @@
 <script>
 
 import Dialog from '../shared/dialog'
-import DatePicker from 'vue2-datepicker'
 
 export default {
 
    props: ['id'],
 
    components:{
-      appDialog:Dialog,
-      DatePicker
+      appDialog:Dialog
    },
     data(){
         return {

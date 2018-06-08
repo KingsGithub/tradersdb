@@ -89,18 +89,15 @@ import Payment from './payment';
     },
     computed: {
         payments() {
-          let stationsLOV = this.$store.getters['stationModule/allStations'];
           let unitsLOV = this.$store.getters['unitModule/allUnits'];
           let tradersLOV = this.$store.getters['traderModule/allTraders'];
           let remodeledPayments = [];
-          let stationName = '';
           let t = '';
           let unitName = '';
           let traderName = '';
-          if(stationsLOV) {
-              const payments = this.$store.getters['paymentModule/allPayments'];
-              payments.forEach( payment => {
-                    stationName = stationsLOV.find( (station) => {return station.id === payment.stationId} ).name;
+          const payments = this.$store.getters['paymentModule/allPayments'];
+          if(payments) {
+                payments.forEach( payment => {
                     t = tradersLOV.find( (trader) => {return trader.id === payment.traderId} );
                     if(t) { traderName = t.firstname + ' ' + t.surname } else traderName = 'Not Found';
                     let unit = unitsLOV.find( (unit) => {return unit.id === payment.unitId} );
@@ -114,8 +111,7 @@ import Payment from './payment';
                 });
               return remodeledPayments;
           }
-          else
-          return this.$store.getters['paymentModule/allPayments']
+          else return this.$store.getters.loadedPayments;
         },
         loading(){
           return this.$store.getters.loading

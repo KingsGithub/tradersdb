@@ -83,8 +83,7 @@ export default {
         leaseId:{type:String, required:true}
    },
    components:{
-      appDialog:Dialog,
-      DatePicker
+      appDialog:Dialog
    },
     data(){
         return {
