@@ -16,6 +16,8 @@ import Units from '@/components/property/units/units'
 import Unit from '@/components/property/units/unit'
 import Lease from '@/components/leases/lease'
 import Leases from '@/components/leases/leases'
+import Document from '@/components/documents/document'
+import Documents from '@/components/documents/documents'
 import Balance from '@/components/accounts/balance'
 import User from '@/components/users/user'
 import Signup from '@/components/users/signup'
@@ -69,6 +71,13 @@ export default new Router({
     { path: '/leases/lease/new', name: 'LeaseNew', component: Lease, props:true,
     beforeRouteEnter: checkAuth },
     { path: '/leases/lease/:id', name: 'LeaseEdit', component: Lease, props:true,
+    beforeRouteEnter: checkAuth },
+
+    { path: '/documents/documents', name: 'Documents', component: Documents,
+    beforeRouteEnter: checkAuth },
+    { path: '/documents/document/new', name: 'DocumentNew', component: Document, props:true,
+    beforeRouteEnter: checkAuth },
+    { path: '/documents/document/:id,:leaseId', name: 'DocumentEdit', component: Document, props:true,
     beforeRouteEnter: checkAuth },
 
     { path: '/accounts/balance', name: 'Balance', component: Balance,

@@ -16,7 +16,7 @@
                   <v-container>
                   <v-text-field type = "hidden" name="id" :id="leaseCopy.id"></v-text-field>
                   <v-layout row wrap class="light-text">
-                      <v-flex xs4>
+                      <v-flex xs6>
                         <v-text-field @input="hasChanged"  prepend-icon="folder" name="leaseNumber" label="lease Number"
                                       :disabled="isFormDisabled" v-model="leaseCopy.leaseNumber"  required :rules="[rules.required]"
                                       >{{leaseCopy.leaseNumber}}
@@ -117,6 +117,7 @@
               <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
               <v-btn dark color="orange" @click="doSave">Save</v-btn>
               <v-btn dark color="orange" @click="doClose">Close</v-btn>
+              <v-btn dark color="orange" @click="doDocs">Document(s)</v-btn>
               <!-- <v-btn dark color="orange" @click="loadleasesHC">LoadHC</v-btn> -->
         </v-card-actions>
          <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="cancelEdits" :heading="heading" ></app-dialog>
@@ -149,6 +150,7 @@ export default {
           heading:"Confirm Cancel",
           showDialog: false,
           menu2:false,
+          theFiles:[],
           rules: {
             required: (value) => !!value || 'Required.',
             email: (value) => {
@@ -274,6 +276,17 @@ export default {
       } else {
         this.showSnackBar("Not modified")
       }
+    },
+    doDocs(){
+      if(this.leaseDBCopy.leaseId) {
+        this.$router.push("/documents/document/0,"+this.leaseDBCopy.leaseId);
+      }
+      else {
+        this.$router.push("/documents/document/0,0");
+      }
+    },
+    doFiles(files){
+      console.log("Files=", this.theFiles, files)
     }
   }
 }
