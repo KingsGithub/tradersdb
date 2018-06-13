@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import "firebase/storage";
+import vuex from 'vuex';
 
 export const documentModule = {
     namespaced: true,
@@ -173,22 +174,7 @@ export const documentModule = {
               //               return documentA.name > documentB.name;
               //         })
             },
-            allRemodeledDocuments( state ){
-              if (state.loadedDocuments.length) {
-                let t = '';
-                let docs = [];
-                var traders = getters['traderModule/allTraders'];
-                for( var doc of state.loadedDocuments){
-                      t = traders.find( trader => { return trader.id === doc.traderId });
-                      docs.push ( { ...doc, traderName: t.firstname + '-' + t.surname, traderId:t.id })
-                }
-                return docs;
-              }
-              else return state.loadedDocuments;
-              // .sort ( (documentA, documentB) => {
-              //               return documentA.name > documentB.name;
-              //         })
-            },
+            
           getDocumentById: state => (id) => {
                 return state.loadedDocuments.find(document => document.id === id); },
 
