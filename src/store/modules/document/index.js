@@ -45,7 +45,6 @@ export const documentModule = {
                   commit('clearError',null,{root:true});
                   commit('setLoading',null,{root:true});
                   //First put doc in firebase Cloud Storage
-                  var newDocRef = firebase.storage().ref('documents');
 
                   //Then put the URL into the firebase database
                   var newkey = firebase.database().ref('documents').push().key;
@@ -178,7 +177,7 @@ export const documentModule = {
               if (state.loadedDocuments.length) {
                 let t = '';
                 let docs = [];
-                var traders = this.$store.getters['traderModule/allTraders'];
+                var traders = getters['traderModule/allTraders'];
                 for( var doc of state.loadedDocuments){
                       t = traders.find( trader => { return trader.id === doc.traderId });
                       docs.push ( { ...doc, traderName: t.firstname + '-' + t.surname, traderId:t.id })
