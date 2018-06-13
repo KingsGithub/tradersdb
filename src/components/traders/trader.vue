@@ -1,7 +1,7 @@
 <template>
     <v-layout>
     <v-flex xs12 sm8 offset-sm2>
-      <v-card>
+      <v-card hover raised style="border-radius:5px">
         <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>

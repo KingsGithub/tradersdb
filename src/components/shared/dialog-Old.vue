@@ -2,7 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="290">
       <!-- <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn> -->
-      <v-card>
+      <v-card hover raised style="border-radius:5px">
         <v-card-title class="headline">{{heading}}</v-card-title>
         <v-card-text>{{message}}</v-card-text>
         <v-card-actions>

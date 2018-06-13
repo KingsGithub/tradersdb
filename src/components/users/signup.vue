@@ -4,7 +4,7 @@
 
     <v-layout>
     <v-flex xs12 sm6 offset-sm3>
-      <v-card>
+      <v-card hover raised style="border-radius:5px">
         <v-layout v-if="error" row>
               <v-flex>
                 <app-alert :text="error.message" @closeAlert="closeAlert"></app-alert>

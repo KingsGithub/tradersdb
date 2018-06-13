@@ -2,7 +2,7 @@
   <v-container>
     <v-layout>
     <v-flex xs12 sm6 offset-sm3>
-      <v-card>
+      <v-card hover raised style="border-radius:5px">
         <v-snackbar v-if="error" :timeout="5000" top v-model="snackbar"> {{ error.message }}
           <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>

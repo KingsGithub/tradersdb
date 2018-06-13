@@ -13,4 +13,5 @@
 11. Capture notes at accounting level - with lease reference?
 12. Create ability to Load documents. Data structures required.
 13. Create convenient shortcuts from one modules to another - and passing data as required.
+14. Have to prevent duplicates of same document being loaded. Or else implement versionsing. Or Both.
 */

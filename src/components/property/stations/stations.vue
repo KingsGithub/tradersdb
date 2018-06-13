@@ -7,7 +7,7 @@
           </v-flex>
     </v-layout>
     <v-flex xs12 sm8 offset-sm2>
-      <v-card v-if="!loading">
+      <v-card v-if="!loading" raised hover style="border-radius:5px">
         <v-card-title primary-title>
           <div>
             <h3>Station List Page     <small class="orange--text">[click row to edit]</small></h3>

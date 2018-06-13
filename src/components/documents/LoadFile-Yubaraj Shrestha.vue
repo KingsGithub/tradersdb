@@ -24,7 +24,7 @@
 					>
 				</v-flex>
 				<v-dialog v-model="dialog" max-width="290">
-					<v-card>
+					<v-card hover raised style="border-radius:5px">
 						<v-card-title class="headline">Hello World!</v-card-title>
 						<v-card-text>Image Upload Script in VUE JS
 							<hr>Yubaraj Shrestha

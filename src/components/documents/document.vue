@@ -1,7 +1,7 @@
 <template>
     <v-layout>
     <v-flex xs12 sm8 offset-sm2>
-      <v-card>
+      <v-card hover raised style="border-radius:5px">
         <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
@@ -137,60 +137,7 @@ export default {
           this.imageUrls = [];
         }
       },
-      uploadFile(file) {  // returns downloadURL
-          // Create the file metadata
-          var metadata = {
-            contentType: 'image/jpeg'
-          };
 
-          const storageRef = firebase.storage().ref();
-          //storageRef.addChild('images');
-
-          // Upload file and metadata to the object 'images/mountains.jpg'
-          var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
-
-          // Listen for state changes, errors, and completion of the upload.
-          uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-                    function(snapshot) {
-                      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                      console.log('Upload is ' + progress + '% done');
-                      switch (snapshot.state) {
-                        case firebase.storage.TaskState.PAUSED: // or 'paused'
-                          console.log('Upload is paused');
-                          break;
-                        case firebase.storage.TaskState.RUNNING: // or 'running'
-                          console.log('Upload is running');
-                          break;
-                      }
-                    },
-                    function(error) {
-
-                            // A full list of error codes is available at
-                            // https://firebase.google.com/docs/storage/web/handle-errors
-                            switch (error.code) {
-                              case 'storage/unauthorized':
-                                // User doesn't have permission to access the object
-                                break;
-
-                              case 'storage/canceled':
-                                // User canceled the upload
-                                break;
-                              /// ETC. TO DO STUFF HERE...
-                              case 'storage/unknown':
-                                // Unknown error occurred, inspect error.serverResponse
-                                break;
-                            }
-                            return '';
-                          },
-                          function() {
-                            // Upload completed successfully, now we can get the download URL
-                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                              console.log('File available at', downloadURL);
-                              return downloadURL;
-                            });
-                        });
-      },
       showSnackBar(text){
           this.snackbartext = text;
           this.snackbar = true;
@@ -252,8 +199,7 @@ export default {
         console.log("number of files=",this.imageFiles.length);
         for( var file of this.imageFiles) {
           this.imageDownLoadURLs.push(this.uploadFile(file));
-          console.log("imageDLURL=",this.imageDownLoadURLs[i]);
-          i++;
+          console.log("imageDLURL=",this.imageDownLoadURLs[i++]);
         }
       }
       // doSave(){

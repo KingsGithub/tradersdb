@@ -54,7 +54,7 @@
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
       <v-spacer></v-spacer>
-      <router-view class="mt-2"/>
+      <router-view class="my-5" hover/>
     </v-content>
 
     <v-footer :fixed="fixed" app>

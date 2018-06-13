@@ -6,15 +6,16 @@ export const documentModule = {
     namespaced: true,
     state: {
               documentTemplate : {
-                  id:0,
+                  id:'0',
                   downloadURL:'',
                   filetype:'',   // jpeg, png, xls,xlsx, doc, pdf, etc.
                   filesize:'',  // not strictly necessary since this should all be available from the db.
-                  accountId: '',
+                  traderId: '',
+                  leaseId:'',
                   filename:'',
                   description:'',
                   createdBy:'',
-                  dateCreated: Date.now(),
+                  dateCreated: '',
                   modifiedBy:'',
                   dateModified:'',
                   loadProgress: 0
@@ -40,19 +41,20 @@ export const documentModule = {
               setCurrentDocument(state,payload){
                   state.currentDocument = payload;
               },
-              insertDocument({commit}, document){
+              insertDocument({commit}, docFile){ //docFile contains file object and document object
                   commit('clearError',null,{root:true});
                   commit('setLoading',null,{root:true});
                   //First put doc in firebase Cloud Storage
-                  var newDocRef = firebase.storage.ref('documents');
+                  var newDocRef = firebase.storage().ref('documents');
 
                   //Then put the URL into the firebase database
                   var newkey = firebase.database().ref('documents').push().key;
                   if(newkey){
-                    document.id = newkey;
-                    firebase.database().ref('/documents/'+ newkey).update(document)
+                    docFile.document.id = newkey;
+                    firebase.database().ref('/documents/'+ newkey).update(docFile.document)
                     .then ( function(result) {
-                        commit('insertDocument',document);
+                        commit('insertDocument',docFile.document);
+                        uploadFile( docFile.file, docFile.document);
                         commit('clearLoading',null,{root:true});
                       })
                     .catch( function(error) {
@@ -65,15 +67,17 @@ export const documentModule = {
                 uploadFile(file, document) {  // returns downloadURL
                   // Create the file metadata
                   var metadata = {
-                    accountId: document.accountId,
-                    createdBy : document.createdBy
+                    traderId: document.traderId,
+                    leaseId: document.leaseId,
+                    createdBy : document.createdBy,
+                    filetype: file.type
                   };
 
                   const storageRef = firebase.storage().ref();
                   //storageRef.addChild('images');
 
                   // Upload file and metadata to the object 'images/mountains.jpg'
-                  var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+                  var uploadTask = storageRef.child('documents/' + file.name).put(file, metadata);
 
                   // Listen for state changes, errors, and completion of the upload.
                   uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
@@ -149,7 +153,9 @@ export const documentModule = {
                           modifiedBy: obj[key].modifiedBy,
                           dateModified: obj[key].dateModified,
                           description: obj[key].description,
-                          firebaseURL: obj[key].firebaseURL
+                          downloadURL: obj[key].downloadURL,
+                          traderId:obj[key].traderId,
+                          leaseId: obj[key].leaseId
                         })
                     };
                     commit('loadDocuments',documents);
@@ -162,13 +168,29 @@ export const documentModule = {
               }
           },
           getters: {
-              allDocuments( state ){
-                return state.loadedDocuments;
-                // .sort ( (documentA, documentB) => {
-                //               return documentA.name > documentB.name;
-                //         })
-              },
-              getDocumentById: state => (id) => {
+            allDocuments( state ){
+              return state.loadedDocuments;
+              // .sort ( (documentA, documentB) => {
+              //               return documentA.name > documentB.name;
+              //         })
+            },
+            allRemodeledDocuments( state ){
+              if (state.loadedDocuments.length) {
+                let t = '';
+                let docs = [];
+                var traders = this.$store.getters['traderModule/allTraders'];
+                for( var doc of state.loadedDocuments){
+                      t = traders.find( trader => { return trader.id === doc.traderId });
+                      docs.push ( { ...doc, traderName: t.firstname + '-' + t.surname, traderId:t.id })
+                }
+                return docs;
+              }
+              else return state.loadedDocuments;
+              // .sort ( (documentA, documentB) => {
+              //               return documentA.name > documentB.name;
+              //         })
+            },
+          getDocumentById: state => (id) => {
                 return state.loadedDocuments.find(document => document.id === id); },
 
               currentDocument: state => {
