@@ -11,7 +11,6 @@ export const stationModule = {
                 phone: ''
           } ,
           loadedStations: [],
-          loadedStationsChanged :false,
           stationsLOV:[],
           loadedStationsHC:[
             {
@@ -28,16 +27,13 @@ export const stationModule = {
         },
         insertStation(state, station){
           state.loadedStations.push(station);
-          loadedStationsChanged = true;
         },
         setStationsLOV(state, lov){
             state.stationsLOV = lov;
-            loadedStationsChanged = false;
         },
         updateStation(state, station){
             let ss = state.loadedStations.find( (stat)=>{ stat.id === station.id});
             ss = station;
-            loadedStationsChanged = true;
         },
         deleteStation(state, stationId){
 

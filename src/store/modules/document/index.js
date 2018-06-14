@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import "firebase/storage";
 import uploadFile  from '../../../components/uploadFile'
+import Vue from "vue"
 
 import vuex from 'vuex';
 
@@ -36,31 +37,33 @@ export const documentModule = {
                   var oldDocument = state.loadedDocuments.find(function (obj) { return obj.id === document.id; });
                   oldDocument = document
                 },
-                deleteDocument(state, documentId){
-
+                deleteDocument(state, document){
+                  // get index of object with doc.id
+                  var removeIndex = state.loadedDocuments.findIndex(function(item) { return item.id === document.id; });
+                  // remove object
+                  state.loadedDocuments.splice(removeIndex, 1);
                 }
             },
             actions: {
               setCurrentDocument(state,payload){
                   state.currentDocument = payload;
               },
-              
+
             insertDocument({commit}, docFile){ //docFile contains file object and document object
                   commit('clearError',null,{root:true});
                   commit('setLoading',null,{root:true});
                   //First put doc in firebase Cloud Storage
 
                   //Then put the URL into the firebase database
-                  var newkey = firebase.database().ref('documents').push().key;
+                  var newkey = firebase.database().ref('documents').push(docFile.document).key;
                   if(newkey){
                     docFile.document.id = newkey;
                     firebase.database().ref('/documents/'+ newkey).update(docFile.document)
                     .then ( function(result) {
-                      console.log('inserting document - ', docFile.document)
-                        commit('insertDocument',docFile.document);
-                        uploadFile (docFile.file, docFile.document);
-                        firebase.database().ref('/documents/'+ newkey).update(docFile.document);
-                        commit('clearLoading',null,{root:true});
+                      console.log('inserting document - ', docFile.document.filename)
+                      commit('insertDocument',docFile.document);
+                      uploadFile (docFile.file, docFile.document);
+                      commit('clearLoading',null,{root:true});
                       })
                     .catch( function(error) {
                       console.log('error inserting document =', error.message)
@@ -82,13 +85,33 @@ export const documentModule = {
                     commit('clearLoading',null, {root:true});
                   })
               },
-              deleteDocument({commit}, documentId){
+              deleteDocument({commit}, document){
+                commit('clearError',null, {root:true});
+                commit('setLoading',null, {root:true});
+                ///TODO ALSO Delete from fireabase.storage!!!!
+                const storageRef = firebase.storage().ref();
+                storageRef.child('documents/' + document.filename).delete()
+                .then( function(result){
+                      firebase.database().ref('/documents/'+ document.id).remove()
+                      .then ( function(result) {
+                          commit('deleteDocument',document); //comment
+                          commit('clearLoading',null, {root:true});
+                        })
+                      .catch( function(error) {
+                        commit('setError', { code: error.code, message: error.message},{root:true});
+                        commit('clearLoading',null, {root:true});
+                      })
+                }).catch(function(error) {
+                    // Uh-oh, an error occurred!
+                    commit('setError', { code: error.code, message: error.message},{root:true});
+                    commit('clearLoading',null, {root:true});
+            });
               },
               loadDocuments({commit}){
                 commit('setLoading',null, {root:true});
                 firebase.database().ref('documents').once('value') //help
                 .then( (data) => {
-                    const documents = [];
+                  const documents = [];
                     const obj = data.val()
                     for(let key in obj) {
                         documents.push({
@@ -112,7 +135,7 @@ export const documentModule = {
                 })
                 .catch(error =>{
                   commit('setError',  { code: error.code, message: error.message} ,{root:true});
-                      commit('clearLoading',null, {root:true});
+                  commit('clearLoading',null, {root:true});
                 })
               }
           },
@@ -123,7 +146,7 @@ export const documentModule = {
               //               return documentA.name > documentB.name;
               //         })
             },
-            
+
           getDocumentById: state => (id) => {
                 return state.loadedDocuments.find(document => document.id === id); },
 

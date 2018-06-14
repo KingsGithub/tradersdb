@@ -54,7 +54,7 @@ export const store = new Vuex.Store({
         .then( result => { commit('logout') })
         .catch(error => {commit('setError',{code:error.code, message:error.message});});
       },
-      signin({commit}, payload){
+      signin({dispatch, commit, rootGetters}, payload){
             commit('setLoading'); commit('clearError');
             firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
               .then( result => {
@@ -62,6 +62,12 @@ export const store = new Vuex.Store({
                 firebase.auth().onAuthStateChanged( user => {
                   if(user) //comment
                   commit('setUser', { id: user.uid, accessToken:user.refreshToken , permissions: []});
+                      dispatch('stationModule/loadStations',null,{root:true});
+                      dispatch('unitModule/loadUnits',null,{root:true});
+                      dispatch('traderModule/loadTraders',null,{root:true});
+                      dispatch('leaseModule/loadLeases',null,{root:true});
+                      dispatch('paymentModule/loadPayments',null,{root:true});
+                      dispatch('documentModule/loadDocuments',null,{root:true});
                 })
               }).catch( error => {
               commit('clearLoading');
