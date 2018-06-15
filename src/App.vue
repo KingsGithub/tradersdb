@@ -100,6 +100,7 @@ export default {
                   { icon: 'file_copy', title: 'Leases', link: '/leases/leases', tooltip:'View and edit Leases'},
                   { icon: 'receipt', title: 'Payments', link: '/payments/payments', tooltip:'View and edit Payments'},
                   { icon: 'file_copy', title: 'Documents', link: '/documents/documents', tooltip:'View and Load Documents'},
+                  { icon: 'file_copy', title: 'Notes', link: '/notes/notes', tooltip:'View and Load Notes'},
                   { icon: 'account_balance', title: 'Accounts', link: '/accounts/balance', tooltip:'View and edit Balances'},
                   { icon: 'account_box', title: 'Users', link: '/users/user', tooltip:'View and edit User Profiles'},
                   { icon: 'person', title: 'Logout', link: '/users/logout', tooltip:'Logout'}

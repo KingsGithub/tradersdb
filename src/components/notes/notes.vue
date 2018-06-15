@@ -51,23 +51,25 @@
   </v-layout>
 </template>
 <script>
-import Note from './note';
   export default {
-    components:{
-      appNote:Note
+    props : {
+      traderId:{ type: String, required: false, default: '-LDMAIzfsAsUOAddMlpK'},
+      leaseId: { type: String, required: false, default: '-LDvJcCxj4-gl35cZ26K'}
     },
     methods:{
-      editNoteOLD(props) {
-        props.expanded = !props.expanded;
-      },
       closeForm() {
         this.$router.push('/')
       },
-      editNote(editNote){
-          this.$router.push('/notes/note/'+editNote.id )
+      editNote(noteToEdit){
+          this.dialog = true;
+          this.editedNote = {...noteToEdit }; //COPY!
+      },
+      saveNote(editedNote){
+           this.$store.dispatch('noteModule/insertNote', editedNote);
       },
       createNew(){
-        this.$router.push('/notes/note/0');
+          this.newNote = this.$store.getters['noteModule/newNote'];
+          this.dialog = true;
       }
     },
     data () {
@@ -88,11 +90,11 @@ import Note from './note';
           let leaseNumber= '';
           if(leasesLOV) {
               const notes = this.$store.getters['noteModule/allNotes'];
-              notes.forEach( note => {
-                    leaseNumber = leasesLOV.find( (lease) => {return lease.id === note.leaseId} ).leaseNumber;
-                    let item = { ...note, leaseNumber: leaseNumber}
-                    remodeledNotes.push(item);
-                });
+              // notes.forEach( note => {
+              //       leaseNumber = leasesLOV.find( (lease) => {return lease.id === note.leaseId} ).leaseNumber;
+              //       let item = { ...note, leaseNumber: leaseNumber}
+              //       remodeledNotes.push(item);
+              //   });
               return remodeledNotes;
           }
           else

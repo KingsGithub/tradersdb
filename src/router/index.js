@@ -38,7 +38,7 @@ export default new Router({
     { path: '/traders/trader/:id', name: 'TraderEdit', component: Trader, props:true,
     beforeRouteEnter: checkAuth},
 
-    { path: '/note/notes', name: 'Notes', component: Notes,
+    { path: '/notes/notes', name: 'Notes', component: Notes,
     beforeRouteEnter: checkAuth },
     { path: '/notes/note/new,:leaseId', name: 'NoteNew', component: Note, props:true,
     beforeRouteEnter: checkAuth },
