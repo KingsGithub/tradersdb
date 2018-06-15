@@ -15,7 +15,7 @@
         <v-card-title primary-title>
           <div>
             <h3>Document List Page
-              <small class="orange--text">[click row to edit]</small>
+              <small class="orange--text">[double-click row to view]</small>
             </h3>
           </div>
           <v-spacer></v-spacer>
@@ -28,6 +28,28 @@
           ></v-text-field>
 
         </v-card-title>
+        <v-dialog v-model="dialog" max-width="500px">
+              <!-- <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn> -->
+              <v-card>
+                <v-card-title>
+                  <span class="headline">{{ formTitle }}</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click.native="cancelEdit">Cancel</v-btn>
+                  <v-btn color="blue darken-1" flat @click.native="saveEdit">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+        </v-dialog>
         <v-data-table
             v-model="selected"
             :headers="headers"
@@ -40,14 +62,14 @@
             :rows-per-page-items="rowsPerPageItems"
           >
             <template slot="items" slot-scope="props" >
-              <tr   :key="props.item.id" @closeForm="props.expanded = false" >
+              <tr   :key="props.item.id" @dblclick="showDoc(props.item)" @closeForm="props.expanded = false" >
               <!-- <td class="text-xs-left">{{ props.item.traderId }}</td> -->
-              <td class="text-xs-left layout px-4">{{ props.item.filename }}</td>
+              <td class="text-xs-left ">{{ props.item.filename }}</td>
+              <td class="text-xs-left ">{{ props.item.description }}</td>
               <td class="text-xs-left">{{ props.item.filesize |sizeFromBytes}}</td>
-              <td class="text-xs-left  pa-0 layout px-0 nowrap">{{ props.item.filetype|truncate }}</td>
+              <td class="text-xs-left ">{{ props.item.filetype|truncate }}</td>
               <td class="text-xs-left">{{ props.item.lastModified |dateFromMilliseconds |truncate}}
-                  <v-progress-linear v-show="props.item.loadProgress < 100 && props.item.loadProgress > 0"
-                  v-model="props.item.loadProgress"></v-progress-linear>
+                  <v-progress-linear v-show="props.item.loadProgress" :indeterminate="props.item.loadProgress"></v-progress-linear>
               </td>
                <td class="justify-center layout px-0">
                     <v-btn icon class="mx-0" @click="editDoc(props.item)">
@@ -104,15 +126,21 @@ import Dialog from '../shared/dialog'
        appDialog:Dialog
     },
     methods:{
-       cancelEdits(confirmed){
-          if(confirmed){
-            this.isFormDisabled = true;
-            this.$router.push('/documents/documents')
-          }
-          else {
-              this.showDialog = false;
-              this.formIsModified = true;
-          }
+      showDoc(document){
+        if(document.downloadURL)
+            window.open(document.downloadURL);
+        else this.showSnackBar("No downloadURL!!!!");
+      },
+       cancelEdit(){
+          this.dialog=false;
+      },
+       editDoc(editDocument){
+          this.editedItem = {...editDocument }; //copy!!!
+          this.dialog = true;
+      },
+      saveEdit(){
+        this.dialog = false;
+        this.$store.dispatch('documentModule/updateDocument', this.editedItem);
       },
       doDialog(heading, message){
           this.heading = heading;
@@ -138,9 +166,7 @@ import Dialog from '../shared/dialog'
       closeForm() {
         this.$router.push('/')
       },
-      editDocument(editDocument){
-          this.$router.push('/documents/document/'+editDocument.id )
-      },
+
       showSnackBar(text){
           this.snackbartext = text;
           this.snackbar = true;
@@ -171,8 +197,12 @@ import Dialog from '../shared/dialog'
             if(files[0] !== undefined) {
               this.filename = '';
               for ( var file of files ) {
+                console.log("onFilePicked - fileUploading...", file.name);
+                var array = new Uint32Array(files.length);
+                window.crypto.getRandomValues(array);
                 var  newDocument = vm.$store.getters['documentModule/newDocument'] ;// get a copy of the template
-                newDocument.id = 'A'+ i++;
+                newDocument.id = array[i++];
+                newDocument.loadProgress = true;
                 this.fileUpload(file, newDocument)
               }
             }else {
@@ -197,7 +227,12 @@ import Dialog from '../shared/dialog'
                         document.lastModified = file.lastModified ;
                         vm.$store.dispatch('documentModule/insertDocument', { file:file, document:document})
                         .then( result => {
-                            vm.refresh();  ///TODO Need to solve the duplicate keys bug in display of loaded documents
+                            vm.$nextTick( function() {
+                                vm.refresh();  ///TODO Need to solve the duplicate keys bug in display of loaded documents
+                            })
+                        })
+                        .catch(error =>{
+                          console.log("Upload error="+error.message);
                         })
             }
             fr.readAsDataURL(file);
@@ -251,7 +286,6 @@ import Dialog from '../shared/dialog'
         snackbar: false,
         snackbartext:'',
         search:'',
-        newDocument: {},
         heading:'',
         message:'',
         fileNames: '',
@@ -261,10 +295,14 @@ import Dialog from '../shared/dialog'
         imageFiles : [],
         imageUrls  : [],
         selected: [],
+        dialog:false,
+        formTitle:'Edit Item',
+        editedItem:{},
         rowsPerPageItems: [4,7,11,16,20, {"text":"All","value":-1}],
         headers: [
           // { text: 'Account Id ', value: 'traderId', align: 'left' },
           { text: 'Name ', value: 'filename', align: 'left' },
+          { text: 'Description', value: 'description' },
           { text: 'Size', value: 'filesize' },
           { text: 'Type', value: 'filetype' },
           { text: 'Last Modified', value: 'lastModified' },

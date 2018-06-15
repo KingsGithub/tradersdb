@@ -12,30 +12,37 @@ export const documentModule = {
               documentTemplate : {
                   id:'0',
                   downloadURL:'',
+                  filename:'',
                   filetype:'',   // jpeg, png, xls,xlsx, doc, pdf, etc.
                   filesize:'',  // not strictly necessary since this should all be available from the db.
                   traderId: '',
                   leaseId:'',
-                  filename:'',
                   description:'',
                   createdBy:'',
                   dateCreated: '',
                   modifiedBy:'',
                   lastModified:'',
-                  loadProgress: 0
+                  loadProgress: false
               },
               loadedDocuments: []
             } ,
-            mutations: {
+    mutations: {
                 loadDocuments(state, documents) {
                     state.loadedDocuments = documents
                 },
-                insertDocument(state, document){
-                  state.loadedDocuments.push(document);
+                insertDocument(state, payload){
+                  state.loadedDocuments.push(payload);
+                },
+                updateProgress(state,document){
+                  var oldDocument = state.loadedDocuments.find(function (obj) { return obj.id === document.id; });
+                  oldDocument.loadProgress = false;
                 },
                 updateDocument(state, document){
                   var oldDocument = state.loadedDocuments.find(function (obj) { return obj.id === document.id; });
+                  console.log("in update:document--id=",document.id+"---"+ document.downloadURL)
+                  if(oldDocument){console.log("olddocid=",oldDocument.id +"---"+ oldDocument.downloadURL)}
                   oldDocument = document
+
                 },
                 deleteDocument(state, document){
                   // get index of object with doc.id
@@ -44,7 +51,7 @@ export const documentModule = {
                   state.loadedDocuments.splice(removeIndex, 1);
                 }
             },
-            actions: {
+    actions: {
               setCurrentDocument(state,payload){
                   state.currentDocument = payload;
               },
@@ -52,26 +59,38 @@ export const documentModule = {
             insertDocument({commit}, docFile){ //docFile contains file object and document object
                   commit('clearError',null,{root:true});
                   commit('setLoading',null,{root:true});
-                  //First put doc in firebase Cloud Storage
-
-                  //Then put the URL into the firebase database
-                  var newkey = firebase.database().ref('documents').push(docFile.document).key;
-                  if(newkey){
-                    docFile.document.id = newkey;
-                    firebase.database().ref('/documents/'+ newkey).update(docFile.document)
-                    .then ( function(result) {
-                      console.log('inserting document - ', docFile.document.filename)
-                      commit('insertDocument',docFile.document);
-                      uploadFile (docFile.file, docFile.document);
-                      commit('clearLoading',null,{root:true});
-                      })
-                    .catch( function(error) {
-                      console.log('error inserting document =', error.message)
-                      commit('setError', {code: error.code, message:error.message},{root:true});
-                      commit('clearLoading',null,{root:true});
-                    })
-                  }
-                },
+                  var file = { ...docFile.file }; // make a copy.
+                  console.log("file=",file);
+                  var doc =  { ...docFile.document }; // make a copy.
+                  //first store the document info on firebase database and get it's key.
+                  doc.loadProgress = true;
+                  firebase.database().ref('documents').push(doc)
+                  .then( data => {
+                        doc.id = data.key;
+                        // now store the blob onto the storage area
+                        firebase.storage().ref('documents/'+data.key+"--" + docFile.file.name).put(docFile.file)
+                        .then (snapshot => {
+                              // get the downloadURL and update the document in the firebase database.
+                              snapshot.ref.getDownloadURL()
+                              .then( downloadurl => {
+                                  doc.downloadURL = downloadurl;
+                                  firebase.database().ref('documents').child(data.key).update(doc)
+                                  .then(result => {
+                                        console.log('inserting document - ', doc.filename+"--"+ doc.downloadURL)
+                                        // Since firebase inserts the doc locally immediately, we have to UPDATE that doc locally!!!!
+                                        doc.loadProgress = false;
+                                        commit('updateProgress', doc);
+                                        commit('clearLoading',null,{root:true});
+                                  })
+                              });
+                          })
+                        .catch( error =>{
+                              console.log('error inserting document =', error.message)
+                              commit('setError', {code: error.code, message:error.message},{root:true});
+                              commit('clearLoading',null,{root:true});
+                        });
+                  });
+              },
               updateDocument({commit}, document){
                 commit('clearError',null, {root:true});
                 commit('setLoading',null, {root:true});
@@ -90,11 +109,11 @@ export const documentModule = {
                 commit('setLoading',null, {root:true});
                 ///TODO ALSO Delete from fireabase.storage!!!!
                 const storageRef = firebase.storage().ref();
-                storageRef.child('documents/' + document.filename).delete()
+                storageRef.child('documents/' + document.id+'--'+document.filename).delete()
                 .then( function(result){
                       firebase.database().ref('/documents/'+ document.id).remove()
                       .then ( function(result) {
-                          commit('deleteDocument',document); //comment
+                   //       commit('deleteDocument',document); //comment
                           commit('clearLoading',null, {root:true});
                         })
                       .catch( function(error) {
@@ -109,8 +128,9 @@ export const documentModule = {
               },
               loadDocuments({commit}){
                 commit('setLoading',null, {root:true});
-                firebase.database().ref('documents').once('value') //help
-                .then( (data) => {
+                firebase.database().ref('documents').on('value',
+                 (data) => {
+                  console.log('loading documents....')
                   const documents = [];
                     const obj = data.val()
                     for(let key in obj) {
@@ -132,14 +152,11 @@ export const documentModule = {
                     };
                     commit('loadDocuments',documents);
                     commit('clearLoading',null, {root:true});
-                })
-                .catch(error =>{
-                  commit('setError',  { code: error.code, message: error.message} ,{root:true});
-                  commit('clearLoading',null, {root:true});
-                })
+                });
+
               }
           },
-          getters: {
+    getters: {
             allDocuments( state ){
               return state.loadedDocuments;
               // .sort ( (documentA, documentB) => {
