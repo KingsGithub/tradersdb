@@ -95,6 +95,7 @@ export default {
         if (user.id != '' ){
           return [
                   { icon: 'people', title: 'Traders', link: '/traders/traders', tooltip:'List of Traders'},
+                  { icon: 'people', title: 'Tabs', link: '/tabs/tabs', tooltip:'List of Tabs'},
                   { icon: 'commute', title: 'Stations', link: '/property/stations/stations', tooltip:'View and edit Stations'},
                   { icon: 'store', title: 'Units', link: '/property/units/units', tooltip:'View and edit Units'},
                   { icon: 'file_copy', title: 'Leases', link: '/leases/leases', tooltip:'View and edit Leases'},
@@ -104,6 +105,7 @@ export default {
                   { icon: 'account_balance', title: 'Accounts', link: '/accounts/balance', tooltip:'View and edit Balances'},
                   { icon: 'account_box', title: 'Users', link: '/users/user', tooltip:'View and edit User Profiles'},
                   { icon: 'person', title: 'Logout', link: '/users/logout', tooltip:'Logout'}
+
                  ];
         }
         else return [

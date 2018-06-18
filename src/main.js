@@ -43,6 +43,5 @@ new Vue({
   render: h => h(App),
   created(){
     firebase.initializeApp(firebaseConfig);
-
   }
 })

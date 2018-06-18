@@ -23,6 +23,9 @@ import User from '@/components/users/user'
 import Signup from '@/components/users/signup'
 import Signin from '@/components/users/signin'
 import Logout from '@/components/users/logout'
+import Tabs from '@/components/tabs/tabs'
+import Recons from '@/components/recons/recons'
+
 import { store } from '../store'
 
 Vue.use(Router) //dfsd
@@ -31,6 +34,17 @@ export default new Router({
   routes: [
     { path: '/', name: 'Home', component: Home },
 
+    { path: '/tabs/tabs', name: 'Tabs',
+    components: {
+        default : Tabs,
+         'tab-1'   : Trader  ,
+         'tab-2': Documents ,
+         'tab-3'    : Notes ,
+         'tab-4' : Payments ,
+         'tab-5'    : Recons
+      },
+        beforeRouteEnter: checkAuth
+      } ,
     { path: '/traders/traders', name: 'Traders', component: Traders,
     beforeRouteEnter: checkAuth },
     { path: '/traders/trader/new', name: 'TraderNew', component: Trader, props:true,

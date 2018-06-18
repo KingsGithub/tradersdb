@@ -18,9 +18,10 @@ export const store = new Vuex.Store({
   state: {
       error:null,
       user:null,
-      // { id: '', permissions: [], accessToken : ''},
+      // { id: '', permissions: [], accessToken : '', name:''},
       loading:false,
-      dialog: false
+      dialog: false,
+      users:[] //{uid:'', name:''}
   },
   mutations: {
     clearError(state){
@@ -44,6 +45,12 @@ export const store = new Vuex.Store({
     },
     setDialog(state,dialogState){
       state.dialog = dialogState
+    },
+    setUserName(state, username){
+      if(state.user) state.user.name = username;
+    },
+    setUsers(state, users){
+      state.users = users;
     }
   },
   actions: {
@@ -63,12 +70,15 @@ export const store = new Vuex.Store({
                 firebase.auth().onAuthStateChanged( user => {
                   if(user) //comment
                   commit('setUser', { id: user.uid, accessToken:user.refreshToken , permissions: []});
+                      dispatch('getUserName');
                       dispatch('stationModule/loadStations',null,{root:true});
                       dispatch('unitModule/loadUnits',null,{root:true});
                       dispatch('traderModule/loadTraders',null,{root:true});
                       dispatch('leaseModule/loadLeases',null,{root:true});
                       dispatch('paymentModule/loadPayments',null,{root:true});
+                      dispatch('loadUsers');
                       dispatch('documentModule/loadDocuments',null,{root:true});
+                      dispatch('noteModule/loadNotes', null, {root:true});
                 })
               }).catch( error => {
               commit('clearLoading');
@@ -101,13 +111,35 @@ export const store = new Vuex.Store({
       },
       dialog({commit}, dialogState){
         commit('setDialog', dialogState)
+      },
+      loadUsers({commit}){
+        firebase.database().ref('users').once('value').
+        then( snapshot =>{
+          var users = [];
+          snapshot.forEach(
+              function (snapshotChild){
+                  var uid = snapshotChild.key ;
+                  var name = snapshotChild.val().name;
+                  users.push({uid:uid, name:name});
+          });
+          commit('setUsers', users);
+    })
+      },
+      getUserName({commit}){
+        var userid = firebase.auth().currentUser.uid;
+        if(userid){
+            firebase.database().ref('users').child(userid).once('value').then(snapshot =>{
+                var name = (snapshot.val() && snapshot.val().name ) || 'UnKnown';
+                commit('setUserName', name);
+          })
+        }
       }
   },
   getters: {
      getUser(state){
        if(state.user) {
        return state.user;
-       } else return {id:'',permissions:[],accessToken:''};
+       } else return {id:'',permissions:[],accessToken:'', name:''};
      },
      userId(state){
        if(state.user)
