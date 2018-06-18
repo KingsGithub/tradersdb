@@ -11,7 +11,8 @@ export const noteModule = {
           dateModified:'',
           modifiedBy:'',
           text:'',
-          leaseId:''
+          leaseId:'',
+          traderId:''
       },
 
         loadedNotes: [],
@@ -23,7 +24,8 @@ export const noteModule = {
               dateModified:'',
               modifiedBy:'',
               text:'',
-              leaseId:''
+              leaseId:'',
+              traderId:''
             }
           ]
       },
@@ -54,7 +56,7 @@ export const noteModule = {
                 note.id = newkey;
                 firebase.database().ref('/notes/'+ newkey).update(note)
                 .then ( function(result) {
-                    commit('insertNote',note);
+                    //commit('insertNote',note);
                     commit('clearLoading',null,{root:true});
                   })
                 .catch( function(error) {
@@ -69,7 +71,7 @@ export const noteModule = {
             commit('setLoading',null, {root:true});
               firebase.database().ref('/notes/'+ note.id).update(note)
               .then ( function(result) {
-                  commit('updateNote',note); //comment
+                  commit('updateNote',note); //Because firebase does a reload whenever a change occurs, this is redundant....!
                   commit('clearLoading',null, {root:true});
                 })
               .catch( function(error) {
@@ -77,32 +79,41 @@ export const noteModule = {
                 commit('clearLoading',null, {root:true});
               })
           },
-          deleteNote({commit}, noteId){
+          deleteNote({commit}, note){
+            commit('clearError',null, {root:true});
+            commit('setLoading',null, {root:true});
+              firebase.database().ref('/notes/'+ note.id).remove()
+              .then ( function(result) {
+                  //commit('updateNote',note); //Because firebase does a reload whenever a change occurs, this is redundant....!
+                  commit('clearLoading',null, {root:true});
+                })
+              .catch( function(error) {
+                commit('setError', { code: error.code, message: error.message},{root:true});
+                commit('clearLoading',null, {root:true});
+              })
           },
           loadNotes({commit}){
             commit('setLoading',null, {root:true});
-            firebase.database().ref('notes').once('value') //help
-            .then( (data) => {
+            firebase.database().ref('notes').on('value',
+             (data) => {
                 const notes = [];
                 const obj = data.val()
                 for(let key in obj) {
                     notes.push({
                       id:key,
-                      createdBy :obj[key].noteNumber,
+                      createdBy :obj[key].createdBy,
                       dateCreated :obj[key].dateCreated,
                       modifiedBy :obj[key].modifiedBy,
                       dateModified :obj[key].dateModified,
                       text: obj[key].text,
-                      leaseId :obj[key].leaseId
+                      leaseId :obj[key].leaseId,
+                      traderId :obj[key].traderId
                     })
                 };
                 commit('loadNotes',notes);
                 commit('clearLoading',null, {root:true});
-            })
-            .catch(error =>{
-              commit('setError',  { code: error.code, message: error.message} ,{root:true});
-                  commit('clearLoading',null, {root:true});
-            })
+            });
+            
           }
       },
       getters: {

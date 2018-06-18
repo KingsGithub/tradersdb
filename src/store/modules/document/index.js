@@ -74,6 +74,7 @@ export const documentModule = {
                               snapshot.ref.getDownloadURL()
                               .then( downloadurl => {
                                   doc.downloadURL = downloadurl;
+                                  doc.loadProgress = false;
                                   firebase.database().ref('documents').child(data.key).update(doc)
                                   .then(result => {
                                         console.log('inserting document - ', doc.filename+"--"+ doc.downloadURL)

@@ -205,10 +205,6 @@ import Dialog from '../shared/dialog'
                 newDocument.loadProgress = true;
                 this.fileUpload(file, newDocument)
               }
-            }else {
-            this.imageNames = [];
-            this.imageFiles = [];
-            this.imageUrls = [];
             }
       },
       fileUpload( file, document){
@@ -291,12 +287,10 @@ import Dialog from '../shared/dialog'
         fileNames: '',
         showDialog:false,
         docToDelete:{},
-        imageNames : [],
-        imageFiles : [],
-        imageUrls  : [],
         selected: [],
+        imageUrls:[],
         dialog:false,
-        formTitle:'Edit Item',
+        formTitle:'Edit Document Description',
         editedItem:{},
         rowsPerPageItems: [4,7,11,16,20, {"text":"All","value":-1}],
         headers: [
