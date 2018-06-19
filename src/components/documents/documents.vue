@@ -14,9 +14,9 @@
       <v-card v-if="!loading" raised hover style="border-radius:5px">
         <v-card-title primary-title>
           <div>
-            <h3>Document List Page
+            <h4>Document List Page
               <small class="orange--text">[double-click row to view]</small>
-            </h3>
+            </h4>
           </div>
           <v-spacer></v-spacer>
           <v-text-field

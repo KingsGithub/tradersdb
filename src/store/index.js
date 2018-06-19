@@ -10,11 +10,12 @@ import { unitModule } from './modules/unit'
 import { leaseModule } from './modules/lease'
 import { documentModule } from './modules/document'
 import { noteModule } from './modules/note'
+import { reconModule } from './modules/recon'
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-  modules: { traderModule, stationModule, unitModule, leaseModule, paymentModule, documentModule, noteModule },
+  modules: { traderModule, stationModule, unitModule, leaseModule, paymentModule, documentModule, noteModule, reconModule },
   state: {
       error:null,
       user:null,

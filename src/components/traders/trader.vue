@@ -1,16 +1,73 @@
 <template>
 
     <v-layout>
+    <!-- <v-flex xs12 sm8 offset-sm2> -->
     <v-flex xs12 sm8 offset-sm2>
+        <v-tabs  icons-and-text centered dark color="light-blue">
+          <v-tabs-slider color="white"></v-tabs-slider>
+          <v-tab href="#tab-1">
+            Trader
+            <v-icon>phone</v-icon>
+          </v-tab>
+          <v-tab href="#tab-2">
+            Documents
+            <v-icon>favorite</v-icon>
+          </v-tab>
+          <v-tab href="#tab-3">
+            Notes
+            <v-icon>account_box</v-icon>
+          </v-tab>
+          <v-tab href="#tab-5">
+            Recon
+            <v-icon>phone</v-icon>
+          </v-tab>
+          <v-tab href="#tab-4">
+            Payments
+            <v-icon>phone</v-icon>
+          </v-tab>
+          <v-tab-item id="tab-1">
+            <v-card flat>
+              <v-card-text>
+              <app-trader/>>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item id="tab-2">
+            <v-card flat>
+              <v-card-text>
+              <app-documents/>>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item id="tab-3">
+            <v-card flat>
+              <v-card-text>
+              <app-notes/>>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item id="tab-4">
+            <v-card flat>
+              <v-card-text>
+              <app-payments/>>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item id="tab-5">
+            <v-card flat>
+              <v-card-text>
+              <app-recon/>>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
       <v-card hover raised style="border-radius:5px">
         <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
-        <v-card-title primary-title>
-          <div>
-            <h3>Trader View and Edit page</h3>
-          </div>
+        <v-card-title height="10">
+            <h4>Trader View and Edit page</h4>
         </v-card-title>
           <v-card-text>
                 <v-form >
@@ -133,10 +190,29 @@
   </v-layout>
 </template>
 <script>
+import Trader from  '../traders/trader.vue'
+  import Documents from '../documents/documents.vue'
+  import Notes from '../notes/notes.vue'
+  import Payments from '../payments/payments.vue'
+  import Recon from '../recons/recons.vue'
 export default {
+   components: {
+      appTrader: Trader,
+      appDocuments: Documents,
+      appNotes: Notes,
+      appPayments: Payments,
+      appRecon: Recon
+    },
    props: ['id'],
     data(){
         return {
+          routerViews: [
+            {tab: 'tab-1', comp: '<app-trader/>'},
+            {tab: 'tab-2', comp: '<app-documents/>'},
+            {tab: 'tab-3', comp: '<app-notes/>'},
+            {tab: 'tab-4', comp: '<app-payments/>'},
+            {tab: 'tab-5', comp: '<app-recon/>'},
+            ],
           isFormDisabled:true,
           formIsModified:false,
           snackbar: false,
