@@ -10,11 +10,11 @@
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm12 offset-sm0  >
       <v-card v-if="!loading" raised hover style="border-radius:5px">
         <v-card-title primary-title>
           <div>
-            <h3>Note List Page </h3>    
+            <h3>Note List Page </h3>
           </div>
           <v-spacer></v-spacer>
           <v-text-field
@@ -80,7 +80,7 @@
           <v-spacer></v-spacer>
            <v-btn dark color="orange" @click="createNew">New</v-btn>
         </v-card-actions>
-        <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="deleteNote" :heading="heading" ></app-dialog>        
+        <app-dialog :message="message" :openDialog="showDialog" :onCloseFunc="deleteNote" :heading="heading" ></app-dialog>
       </v-card>
     </v-flex>
   </v-layout>
@@ -187,7 +187,7 @@
           // let remodeledNotes = [];
           // let leaseNumber= '';
           // if(leasesLOV) {
-              const notes = this.$store.getters['noteModule/allNotes'];
+              const notes = this.$store.getters['noteModule/traderNotes'](traderId);
               // notes.forEach( note => {
               //       leaseNumber = leasesLOV.find( (lease) => {return lease.id === note.leaseId} ).leaseNumber;
               //       let item = { ...note, leaseNumber: leaseNumber}
@@ -202,10 +202,6 @@
         loading(){
           return this.$store.getters.loading
         }
-      },
-      created(){
-        if (!this.$store.getters.allNotes)
-          this.$store.dispatch('noteModule/loadNotes');
       }
   }
 </script>

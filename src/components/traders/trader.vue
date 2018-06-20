@@ -28,35 +28,35 @@
           <v-tab-item id="tab-1">
             <v-card flat>
               <v-card-text>
-              <app-trader/>>
+              <app-trader/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-2">
             <v-card flat>
               <v-card-text>
-              <app-documents/>>
+              <app-documents/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-3">
             <v-card flat>
               <v-card-text>
-              <app-notes/>>
+              <app-notes/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-4">
             <v-card flat>
               <v-card-text>
-              <app-payments/>>
+              <app-payments/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-5">
             <v-card flat>
               <v-card-text>
-              <app-recon/>>
+              <app-recon/>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -126,6 +126,12 @@
                                     :disabled="isFormDisabled" v-model="traderCopy.streetAddress" required :rules="[rules.required]"
                        >{{traderCopy.streetAddress}}</v-text-field>
                       </v-flex>
+                      <v-flex xs3 class="ml-3">
+                        <v-text-field  @input="hasChanged" prepend-icon="store" name="personType" label="Person Type"
+                            hint="Classification of person involved"
+                            disabled v-model="traderCopy.personType"  required :rules="[rules.required]"
+                            >{{traderCopy.personType}}</v-text-field>
+                       </v-flex>
                   </v-layout>
                     <v-layout row wrap>
                         <v-flex xs3>
@@ -151,12 +157,7 @@
                             :disabled="isFormDisabled" v-model="traderCopy.country">{{traderCopy.country}}</v-text-field>
                        </v-flex>
                        </v-layout>
-                       <v-flex xs2>
-                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="personType" label="Person Type"
-                            hint="Classification of person involved"
-                            disabled v-model="traderCopy.personType"  required :rules="[rules.required]"
-                            >{{traderCopy.personType}}</v-text-field>
-                       </v-flex>
+
 
                     <v-layout row wrap class="light-text mb-2">
                         <v-flex>

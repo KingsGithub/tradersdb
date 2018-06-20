@@ -6,7 +6,7 @@
             <app-busywait :loading="test"></app-busywait>
           </v-flex>
     </v-layout>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm12 offset-sm0>
       <v-card v-if="!loading" raised hover style="border-radius:5px">
         <v-card-title primary-title>
           <div>

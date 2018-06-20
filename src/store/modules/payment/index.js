@@ -138,6 +138,11 @@ export const paymentModule={
           },
           chargeTypes(state){
             return state.chargeTypes;
+          },
+          traderPayments(state){
+            return function(traderId){
+                return state.loadedPayments.filter( payment => payment.traderId === traderId );
+            }
           }
       }
   }

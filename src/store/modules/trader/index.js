@@ -16,7 +16,8 @@ export const traderModule = {
           postalCode :'8001',
           country :'South Africa',
           company :'',
-          personType :'Trader'
+          personType :'Trader',
+          accountNumbers: [{accountNo:'', fromDate:'', toDate:'', status:'', dateModified:'', modifiedBy:''}]
         },
           currentTrader: {
             id :0,
@@ -30,7 +31,9 @@ export const traderModule = {
             landLine :'0213948594',
             commodity:'Oil',
             streetAddress :'120 Main Road',  city :'Cape Town',  province :'Western Cape',  postalCode :'8001', country :'South Africa',
-               company :'JHB Oil', personType :'Trader'
+            company :'JHB Oil',
+            personType :'Trader',
+            accountNumbers: [{accountNo:'', fromDate:'', toDate:'', status:'', dateModified:'', modifiedBy:''}]
             },
             loadedTraders: [],
           loadedTradersHC:[
@@ -137,7 +140,8 @@ export const traderModule = {
                       postalCode :obj[key].postalCode,
                       country :obj[key].country,
                       company :obj[key].company,
-                      personType :obj[key].personType
+                      personType :obj[key].personType,
+                      accountNumbers: obj[key].accountNumbers
                     })
                 };
                 commit('loadTraders',traders);

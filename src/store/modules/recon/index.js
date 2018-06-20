@@ -141,6 +141,11 @@ export const reconModule = {
           },
           loadedReconsHC(state){
             return state.loadedReconsHC;
+          },
+          traderRecons(state){
+            return function(traderId){
+                return state.loadedRecons.filter( recon => recon.traderId === traderId );
+            }
           }
 
       }

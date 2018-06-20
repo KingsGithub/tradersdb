@@ -184,6 +184,11 @@ export const documentModule = {
               },
               loadedDocumentsHC(state){
                 return state.loadedDocumentsHC;
+              },
+              traderDocuments(state){
+                return function(traderId) {
+                      return state.loadedDocuments.filter( doc => doc.traderId === traderId );
+                }
               }
             }
 }

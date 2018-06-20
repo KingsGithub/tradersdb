@@ -113,7 +113,7 @@ export const noteModule = {
                 commit('loadNotes',notes);
                 commit('clearLoading',null, {root:true});
             });
-            
+
           }
       },
       getters: {
@@ -141,6 +141,11 @@ export const noteModule = {
           },
           loadedNotesHC(state){
             return state.loadedNotesHC;
+          },
+          traderNotes(state){
+            return function(traderId){
+                return state.loadedNotes.filter( note => note.traderId === traderId );
+            }
           }
 
       }

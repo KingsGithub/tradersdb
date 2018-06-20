@@ -10,7 +10,7 @@
             {{ snackbartext }}
             <v-btn flat light color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm12 offset-sm0>
       <v-card v-if="!loading" raised hover style="border-radius:5px">
         <v-card-title primary-title>
           <div>
@@ -306,7 +306,7 @@ import Dialog from '../shared/dialog'
     },
     computed: {
         documents() {
-              return this.$store.getters['documentModule/allDocuments'];
+              return this.$store.getters['documentModule/traderDocuments'](traderId);
         },
         loading(){
           return this.$store.getters.loading
