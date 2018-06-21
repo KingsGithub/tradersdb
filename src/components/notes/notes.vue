@@ -187,7 +187,7 @@
           // let remodeledNotes = [];
           // let leaseNumber= '';
           // if(leasesLOV) {
-              const notes = this.$store.getters['noteModule/traderNotes'](traderId);
+              const notes = this.$store.getters['noteModule/traderNotes'](this.traderId);
               // notes.forEach( note => {
               //       leaseNumber = leasesLOV.find( (lease) => {return lease.id === note.leaseId} ).leaseNumber;
               //       let item = { ...note, leaseNumber: leaseNumber}

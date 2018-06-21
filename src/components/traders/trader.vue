@@ -2,8 +2,8 @@
 
     <v-layout>
     <!-- <v-flex xs12 sm8 offset-sm2> -->
-    <v-flex xs12 sm8 offset-sm2>
-        <v-tabs  icons-and-text centered dark color="light-blue">
+    <v-flex xs12 sm12 offset-sm0>
+        <!-- <v-tabs  icons-and-text centered dark color="light-blue">
           <v-tabs-slider color="white"></v-tabs-slider>
           <v-tab href="#tab-1">
             Trader
@@ -35,32 +35,32 @@
           <v-tab-item id="tab-2">
             <v-card flat>
               <v-card-text>
-              <app-documents/>
+              <app-documents :traderId="id"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-3">
             <v-card flat>
               <v-card-text>
-              <app-notes/>
+              <app-notes :traderId="id"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-4">
             <v-card flat>
               <v-card-text>
-              <app-payments/>
+              <app-payments :traderId="id"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item id="tab-5">
             <v-card flat>
               <v-card-text>
-              <app-recon/>
+              <app-recon :traderId="id"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
-        </v-tabs>
+        </v-tabs> -->
       <v-card hover raised style="border-radius:5px">
         <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
             {{ snackbartext }}

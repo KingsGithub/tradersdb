@@ -306,7 +306,7 @@ import Dialog from '../shared/dialog'
     },
     computed: {
         documents() {
-              return this.$store.getters['documentModule/traderDocuments'](traderId);
+              return this.$store.getters['documentModule/traderDocuments'](this.traderId);
         },
         loading(){
           return this.$store.getters.loading

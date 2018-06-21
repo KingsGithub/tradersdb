@@ -34,15 +34,14 @@ export default new Router({
   routes: [
     { path: '/', name: 'Home', component: Home },
 
-    { path: '/tabs/tabs', name: 'Tabs',
-    components: {
-        default : Tabs,
-         'tab-1'   : Trader  ,
-         'tab-2': Documents ,
-         'tab-3'    : Notes ,
-         'tab-4' : Payments ,
-         'tab-5'    : Recons
-      },
+    { path: '/tabs/tabs/:traderId', name: 'Tabs', component: Tabs,
+      children: [
+      { path:'/tabs/tabs/tab1/:traderId', component: Trader, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', component: Documents, props:true },
+      { path:'/tabs/tabs/tab3/:traderId', component: Notes, props:true },
+      { path:'/tabs/tabs/tab4/:traderId', component: Payments, props:true } ,
+      { path:'/tabs/tabs/tab5/:traderId', component: Recons, props:true }
+       ], props:true,
         beforeRouteEnter: checkAuth
       } ,
     { path: '/traders/traders', name: 'Traders', component: Traders,

@@ -56,6 +56,10 @@
 <script>
 import Payment from './payment';
   export default {
+    props : {
+      traderId:{ type: String, required: false, default: '-LDMAIzfsAsUOAddMlpK'},
+      leaseId: { type: String, required: false, default: '-LDvJcCxj4-gl35cZ26K'}
+    },
     components:{
       appPayment:Payment
     },
@@ -88,11 +92,13 @@ import Payment from './payment';
       }
     },
     computed: {
+
+
         payments() {
           let leasesLOV = this.$store.getters['leaseModule/allLeases'];
           let remodeledPayments = [];
           let leaseNumber = '';
-          const payments = this.$store.getters['paymentModule/allPayments'];
+          const payments = this.$store.getters['paymentModule/traderPayments'](this.traderId);
           if(payments) {
                 payments.forEach( payment => {
                     leaseNumber = leasesLOV.find( (lease) => {return lease.id === payment.leaseId}).leaseNumber
