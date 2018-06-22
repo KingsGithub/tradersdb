@@ -308,6 +308,7 @@ export default {
                 else {
                   this.showSnackBar('Saved.');
                   this.formIsModified = false;
+                  this.$store.dispatch('traderModule/setCurrentTrader', this.traderCopy);
                   this.$emit('traderCreated', this.traderCopy.id);
                 }
               })
