@@ -18,8 +18,7 @@ export const store = new Vuex.Store({
   modules: { traderModule, stationModule, unitModule, leaseModule, paymentModule, documentModule, noteModule, reconModule },
   state: {
       error:null,
-      user:null,
-      // { id: '', permissions: [], accessToken : '', name:''},
+      user:null, // { id: '', permissions: [], accessToken : '', name:''},
       loading:false,
       dialog: false,
       users:[] //{uid:'', name:''}
@@ -152,6 +151,9 @@ export const store = new Vuex.Store({
      },
      dialog(state){
        return state.dialog
+     },
+     users(state){
+       return state.users;
      }
      /*
      ,

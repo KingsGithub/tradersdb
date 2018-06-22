@@ -35,7 +35,7 @@
                   <v-container grid-list-md>
                     <v-layout row wrap>
                       <v-flex xs12>
-                        <v-text-field v-model="editedItem.text" :width="400" textarea required :rules="[rules.required]" label="Note"></v-text-field>
+                        <v-text-field autofocus v-model="editedItem.text" :width="400" textarea required :rules="[rules.required]" label="Note"></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -57,11 +57,11 @@
           >
             <template slot="items" slot-scope="props" >
               <tr  :key="props.item.id" @closeForm="props.expanded = false" >
-              <td class="text-xs-left">{{ props.item.traderId }}</td>
-              <td class="text-xs-left">{{ props.item.leaseId }}</td>
+              <!-- <td class="text-xs-left">{{ props.item.traderId }}</td>
+              <td class="text-xs-left">{{ props.item.leaseId }}</td> -->
               <td class="text-xs-left">{{ props.item.text }}</td>
-              <td class="text-xs-left">{{ props.item.createdBy }}</td>
-              <td class="text-xs-left">{{ props.item.dateCreated }}</td>
+              <td class="text-xs-left">{{ props.item.createdByName }}</td>
+              <td class="text-xs-left">{{ props.item.dateCreated |dateFromMilliseconds|truncate}}</td>
               <td class="justify-center layout px-0">
                   <v-btn icon class="mx-0" @click="editNote(props.item)">
                     <v-icon color="teal">edit</v-icon>
@@ -173,9 +173,9 @@
             required: (value) => !!value || 'Required.'
         },
         headers: [
-          { text: 'TraderId ', value: 'traderId', align: 'left' },
-          { text: 'Lease Id', value: 'leaseId', align: 'left' },
-          { text: 'Note', value: 'text' },
+          // { text: 'TraderId ', value: 'traderId', align: 'left' },
+          // { text: 'Lease Id', value: 'leaseId', align: 'left' },
+          { text: 'Note', value: 'text', width:"600",align:"center" },
           { text: 'WrittenBy', value: 'createdBy', align: 'left' },
           { text: 'Date', value: 'dateCreated' }
         ]

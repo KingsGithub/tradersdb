@@ -19,22 +19,7 @@ export const traderModule = {
           personType :'Trader',
           accountNumbers: [{accountNo:'', fromDate:'', toDate:'', status:'', dateModified:'', modifiedBy:''}]
         },
-          currentTrader: {
-            id :0,
-            surname :'Constantine',
-            firstName :'Frederick',
-            hasProofOfAddress :false,
-            hasLeaseApplicationForm : false,
-            hasMarriageCertificate :false,
-            email :'constantinef@gmail.com',
-            cellphone:'0348597654',
-            landLine :'0213948594',
-            commodity:'Oil',
-            streetAddress :'120 Main Road',  city :'Cape Town',  province :'Western Cape',  postalCode :'8001', country :'South Africa',
-            company :'JHB Oil',
-            personType :'Trader',
-            accountNumbers: [{accountNo:'', fromDate:'', toDate:'', status:'', dateModified:'', modifiedBy:''}]
-            },
+          currentTrader: { },
             loadedTraders: [],
           loadedTradersHC:[
             { id:'asddf434', firstname:'George', surname:'Clooney', email:'gclooney@gmail.com', cellphone:'083 348 9209', landLine:'0216457287' , streetAddress:'142 Loop Street, Cape Town',
@@ -76,12 +61,14 @@ export const traderModule = {
           oldTrader = trader
         },
         deleteTrader(state, traderId){
-
+        },
+        setCurrentTrader(state, trader){
+          state.currentTrader = trader; //simply point to it.
         }
       },
       actions: {
-          setCurrentTrader(state,payload){
-          state.currentTrader = payload;
+          setCurrentTrader({commit},trader){
+              commit('setCurrentTrader',trader);
           },
           insertTrader({commit}, trader){
               commit('clearError',null,{root:true});

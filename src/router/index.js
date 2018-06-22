@@ -36,11 +36,11 @@ export default new Router({
 
     { path: '/tabs/tabs/:traderId', name: 'Tabs', component: Tabs,
       children: [
-      { path:'/tabs/tabs/tab1/:traderId', component: Trader, props:true },
-      { path:'/tabs/tabs/tab2/:traderId', component: Documents, props:true },
-      { path:'/tabs/tabs/tab3/:traderId', component: Notes, props:true },
-      { path:'/tabs/tabs/tab4/:traderId', component: Payments, props:true } ,
-      { path:'/tabs/tabs/tab5/:traderId', component: Recons, props:true }
+      { path:'/tabs/tabs/tab1/:traderId', name:'trader', component: Trader, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', name:'document', component: Documents, props:true },
+      { path:'/tabs/tabs/tab3/:traderId', name:'note', component: Notes, props:true },
+      { path:'/tabs/tabs/tab4/:traderId', name:'payment', component: Payments, props:true } ,
+      { path:'/tabs/tabs/tab5/:traderId', name:'recon', component: Recons, props:true }
        ], props:true,
         beforeRouteEnter: checkAuth
       } ,
@@ -48,7 +48,7 @@ export default new Router({
     beforeRouteEnter: checkAuth },
     { path: '/traders/trader/new', name: 'TraderNew', component: Trader, props:true,
     beforeRouteEnter: checkAuth },
-    { path: '/traders/trader/:id', name: 'TraderEdit', component: Trader, props:true,
+    { path: '/traders/trader/:traderId', name: 'TraderEdit', component: Trader, props:true,
     beforeRouteEnter: checkAuth},
 
     { path: '/notes/notes', name: 'Notes', component: Notes,
@@ -90,7 +90,7 @@ export default new Router({
     beforeRouteEnter: checkAuth },
     { path: '/documents/document/new', name: 'DocumentNew', component: Document, props:true,
     beforeRouteEnter: checkAuth },
-    { path: '/documents/document/:id,:traderId', name: 'DocumentEdit', component: Document, props:true,
+    { path: '/documents/document/:traderId', name: 'DocumentEdit', component: Document, props:true,
     beforeRouteEnter: checkAuth },
 
     { path: '/accounts/balance', name: 'Balance', component: Balance,

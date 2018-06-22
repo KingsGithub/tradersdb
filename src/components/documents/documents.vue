@@ -57,7 +57,7 @@
             :search="search"
             :loading="loading"
             class="elevation-1"
-             :pagination.sync="pagination"
+            :pagination.sync="pagination"
             item-key="id"
             :rows-per-page-items="rowsPerPageItems"
           >
@@ -252,28 +252,6 @@ import Dialog from '../shared/dialog'
         }
       }
     },
-    filters:{
-       truncate(item){
-         return item.substring(0,25);
-       },
-       dateFromMilliseconds(item){
-         var d = new Date(item);
-         return d.toString(); //getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
-       },
-      sizeFromBytes(item){
-          var x = 0;
-          var suffix = "";
-          if(item < 1000){
-            x = item;
-          }
-          else if(item < 1000000){
-            x = item / 1000;suffix = "kB";
-          }else if(item >= 1000000){
-            x = item/1000000;suffix = "MB";
-          }
-          return (x+"").substring(0,5)+" "+suffix;
-      }
-    },
     data () {
       return {
         pagination: {
@@ -292,7 +270,7 @@ import Dialog from '../shared/dialog'
         dialog:false,
         formTitle:'Edit Document Description',
         editedItem:{},
-        rowsPerPageItems: [4,7,11,16,20, {"text":"All","value":-1}],
+        rowsPerPageItems: [7,11,16,20, {"text":"All","value":-1}],
         headers: [
           // { text: 'Account Id ', value: 'traderId', align: 'left' },
           { text: 'Name ', value: 'filename', align: 'left' },

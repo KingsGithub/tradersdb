@@ -39,8 +39,6 @@ export const documentModule = {
                 },
                 updateDocument(state, document){
                   var oldDocument = state.loadedDocuments.find(function (obj) { return obj.id === document.id; });
-                  console.log("in update:document--id=",document.id+"---"+ document.downloadURL)
-                  if(oldDocument){console.log("olddocid=",oldDocument.id +"---"+ oldDocument.downloadURL)}
                   oldDocument = document
 
                 },
@@ -60,7 +58,6 @@ export const documentModule = {
                   commit('clearError',null,{root:true});
                   commit('setLoading',null,{root:true});
                   var file = { ...docFile.file }; // make a copy.
-                  console.log("file=",file);
                   var doc =  { ...docFile.document }; // make a copy.
                   //first store the document info on firebase database and get it's key.
                   doc.loadProgress = true;
@@ -77,7 +74,6 @@ export const documentModule = {
                                   doc.loadProgress = false;
                                   firebase.database().ref('documents').child(data.key).update(doc)
                                   .then(result => {
-                                        console.log('inserting document - ', doc.filename+"--"+ doc.downloadURL)
                                         // Since firebase inserts the doc locally immediately, we have to UPDATE that doc locally!!!!
                                         doc.loadProgress = false;
                                         commit('updateProgress', doc);
@@ -86,7 +82,6 @@ export const documentModule = {
                               });
                           })
                         .catch( error =>{
-                              console.log('error inserting document =', error.message)
                               commit('setError', {code: error.code, message:error.message},{root:true});
                               commit('clearLoading',null,{root:true});
                         });
@@ -131,7 +126,6 @@ export const documentModule = {
                 commit('setLoading',null, {root:true});
                 firebase.database().ref('documents').on('value',
                  (data) => {
-                  console.log('loading documents....')
                   const documents = [];
                     const obj = data.val()
                     for(let key in obj) {

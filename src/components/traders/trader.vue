@@ -204,7 +204,7 @@ export default {
       appPayments: Payments,
       appRecon: Recon
     },
-   props: ['id'],
+   props: ['traderId'],
     data(){
         return {
           routerViews: [
@@ -238,10 +238,10 @@ export default {
      },
       traderCopy(){
         let trader = '';
-        if(this.id === '0')
+        if(this.traderId === '0')
             trader = { ...this.$store.getters['traderModule/newTrader'] };  // copy the template
          else {
-            trader = { ...this.$store.getters['traderModule/selectedTrader'](this.id) }// copy the actual existing trader for editing.
+            trader = { ...this.$store.getters['traderModule/selectedTrader'](this.traderId) }// copy the actual existing trader for editing.
          }
          this.traderdbCopy = trader
          return this.traderdbCopy;
@@ -301,33 +301,33 @@ export default {
           this.$store.dispatch('clearError',{root:true});
           if(this.traderCopy.id === '0') {
               this.$store.dispatch('traderModule/insertTrader', this.traderCopy, {root:true})
-                  .then( result => {
-                    if(this.$store.getters.error){
-                        this.showSnackBar(error.message);
-                    }
-                    else {
-                      this.showSnackBar('Saved.');
-                      this.formIsModified = false;
-                    }
-                  })
-          }
-          else {
-              this.$store.dispatch('traderModule/updateTrader', this.traderCopy, {root:true})
               .then( result => {
-                      if(this.$store.getters.error){
-                          this.showSnackBar(error.message);
-                      }
-                      else {
-                        this.showSnackBar('Updated.');
-                        this.formIsModified = false;
-                      }
+                if(this.$store.getters.error){
+                    this.showSnackBar(error.message);
+                }
+                else {
+                  this.showSnackBar('Saved.');
+                  this.formIsModified = false;
+                  this.$emit('traderCreated', this.traderCopy.id);
+                }
               })
-              .catch(error => { this.showSnackBar(error.message)})
-          }
-      } else {
-        this.showSnackBar("Not modified")
-
-      }
+            }
+            else {
+                  this.$store.dispatch('traderModule/updateTrader', this.traderCopy, {root:true})
+                  .then( result => {
+                          if(this.$store.getters.error){
+                              this.showSnackBar(error.message);
+                          }
+                          else {
+                            this.showSnackBar('Updated.');
+                            this.formIsModified = false;
+                          }
+                  })
+                  .catch(error => { this.showSnackBar(error.message)})
+            }
+        } else {
+          this.showSnackBar("Not modified")
+        }
     }
   }
 }

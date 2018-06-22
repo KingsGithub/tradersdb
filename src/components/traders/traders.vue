@@ -23,12 +23,16 @@
 
         </v-card-title>
         <v-data-table
+           v-model="selected"
+            class="elevation-1"
             :headers="headers"
             :items="traders"
             :search="search"
-            hide-actions
+            actions
             :loading="loading"
-            class="elevation-1"
+            :pagination.sync="pagination"
+            item-key="id"
+            :rows-per-page-items="rowsPerPageItems"
           >
             <template slot="items" slot-scope="props" >
               <tr   @click="editTrader(props.item)" :key="props.item.id" @closeForm="props.expanded = false" >
@@ -67,17 +71,30 @@ import Trader from './trader';
         this.$router.push('/')
       },
       editTrader(editTrader){
-          //this.$router.push('/traders/trader/'+editTrader.id )
-           this.$router.push('/tabs/tabs/'+editTrader.id )
+          this.$store.dispatch('traderModule/setCurrentTrader',editTrader);
+          this.$router.push('/tabs/tabs/'+this.currentTrader.id )
       },
       createNew(){
-        this.$router.push('/traders/trader/0'); //testing git
+        this.$router.push('/tabs/tabs/0');
+      },
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
       }
     },
     data () {
       return {
         search:'',
         newTrader: {},
+        pagination: {
+            sortBy: 'surname'
+        },
+         selected: [],
+        rowsPerPageItems: [7,11,16,20, {"text":"All","value":-1}],
         headers: [
           { text: 'FirstName', value: 'firstname', align: 'left' },
           { text: 'Surname', value: 'surname' },
@@ -94,6 +111,9 @@ import Trader from './trader';
         },
         loading(){
           return this.$store.getters.loading
+        },
+        currentTrader(){
+          return this.$store.getters['traderModule/currentTrader'];
         }
       },
       created(){

@@ -27,12 +27,37 @@ Vue.use(Vuetify, {
   }
 })
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
 Vue.component('app-alert', Alert)
 Vue.component('app-snackbar', SnackBar)
 Vue.component('app-busywait', BusyWait)
 Vue.component('app-dialog',Dialog)
 Vue.component('app-date',DDate)
+Vue.filter( 'dateFromMilliseconds',
+            function(item){
+                var d = new Date(item);
+                return d.toString(); //getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
+            });
+Vue.filter('truncate', function(item){
+              return item.substring(0,25);
+            }
+);
+Vue.filter('sizeFromBytes',
+    function(item){
+        var x = 0;
+        var suffix = "";
+        if(item < 1000){
+          x = item;
+        }
+        else if(item < 1000000){
+          x = item / 1000;suffix = "kB";
+        }else if(item >= 1000000){
+          x = item/1000000;suffix = "MB";
+        }
+        return (x+"").substring(0,5)+" "+suffix;
+    }
+);
 
 /* eslint-disable no-new */
 

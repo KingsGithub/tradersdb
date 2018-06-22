@@ -142,9 +142,18 @@ export const noteModule = {
           loadedNotesHC(state){
             return state.loadedNotesHC;
           },
-          traderNotes(state){
+          traderNotes(state, getters, rootState, rootGetters){
             return function(traderId){
-                return state.loadedNotes.filter( note => note.traderId === traderId );
+              var users = rootGetters['users'];
+              var notes = state.loadedNotes.filter( note => note.traderId === traderId )
+              if (notes) {
+                  notes.forEach( note=>{
+                    let username = users.find( u => {return u.uid === note.createdBy}).name ;
+                    if(username) note.createdByName = username;
+                    else note.createdByName = "Unknown";
+                })
+              }
+              return notes;
             }
           }
 
