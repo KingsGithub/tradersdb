@@ -16,8 +16,7 @@ export const traderModule = {
           postalCode :'8001',
           country :'South Africa',
           company :'',
-          personType :'Trader',
-          accountNumbers: [{accountNo:'', fromDate:'', toDate:'', status:'', dateModified:'', modifiedBy:''}]
+          personType :'Trader'
         },
           currentTrader: { },
             loadedTraders: [],

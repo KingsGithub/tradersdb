@@ -3,64 +3,7 @@
     <v-layout>
     <!-- <v-flex xs12 sm8 offset-sm2> -->
     <v-flex xs12 sm12 offset-sm0>
-        <!-- <v-tabs  icons-and-text centered dark color="light-blue">
-          <v-tabs-slider color="white"></v-tabs-slider>
-          <v-tab href="#tab-1">
-            Trader
-            <v-icon>phone</v-icon>
-          </v-tab>
-          <v-tab href="#tab-2">
-            Documents
-            <v-icon>favorite</v-icon>
-          </v-tab>
-          <v-tab href="#tab-3">
-            Notes
-            <v-icon>account_box</v-icon>
-          </v-tab>
-          <v-tab href="#tab-5">
-            Recon
-            <v-icon>phone</v-icon>
-          </v-tab>
-          <v-tab href="#tab-4">
-            Payments
-            <v-icon>phone</v-icon>
-          </v-tab>
-          <v-tab-item id="tab-1">
-            <v-card flat>
-              <v-card-text>
-              <app-trader/>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item id="tab-2">
-            <v-card flat>
-              <v-card-text>
-              <app-documents :traderId="id"/>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item id="tab-3">
-            <v-card flat>
-              <v-card-text>
-              <app-notes :traderId="id"/>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item id="tab-4">
-            <v-card flat>
-              <v-card-text>
-              <app-payments :traderId="id"/>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item id="tab-5">
-            <v-card flat>
-              <v-card-text>
-              <app-recon :traderId="id"/>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs> -->
+
       <v-card hover raised style="border-radius:5px">
         <v-snackbar class="green white--text" :timeout="timeoutt"  :top="yposition"  v-model="snackbar">
             {{ snackbartext }}
@@ -74,14 +17,14 @@
                   <v-container>
                   <v-text-field type = "hidden" name="id" :id="traderCopy.id"></v-text-field>
                   <v-layout row wrap class="light-text">
-                      <v-flex xs5>
+                      <v-flex xs5 >
                         <v-text-field @input="hasChanged"  prepend-icon="person" name="firstname" label="FirstName"
                                       :disabled="isFormDisabled" v-model="traderCopy.firstname"  required :rules="[rules.required]"
                                       >{{traderCopy.firstname}}
                         </v-text-field>
                       </v-flex>
 
-                      <v-flex xs5 class="ml-4">
+                      <v-flex xs5 class="ml-2">
                           <v-text-field @input="hasChanged" id="surname" name="surname" label="Surname"  :disabled="isFormDisabled"
                                         v-model="traderCopy.surname"   required :rules="[rules.required]">{{traderCopy.surname}}
                           </v-text-field>
@@ -102,14 +45,13 @@
                       <v-spacer></v-spacer>
                   </v-layout>
                   <v-layout>
-                      <v-flex xs2>
-                          <v-text-field xs4 @input="hasChanged" prepend-icon="person" name="idNumber" label="IDNumber"
+                      <v-flex xs3>
+                          <v-text-field @input="hasChanged" prepend-icon="person" name="idNumber" label="IDNumber"
                           :disabled="isFormDisabled" v-model="traderCopy.idNumber" required :rules="[rules.required]">
                             {{traderCopy.idNumber}}</v-text-field>
                       </v-flex>
-                      <v-spacer></v-spacer>
-                      <v-flex xs4>
-                        <v-text-field xs8 @input="hasChanged" prepend-icon="store" name="commodity" label="Commodity"
+                      <v-flex xs4 class="ml-3">
+                        <v-text-field @input="hasChanged" prepend-icon="store" name="commodity" label="Commodity"
                             hint="The type of goods sold by the trader"
                             :disabled="isFormDisabled" v-model="traderCopy.commodity"  required :rules="[rules.required]" >
                             {{traderCopy.commodity}}</v-text-field>
@@ -121,12 +63,12 @@
                        </v-flex>
                     </v-layout>
                   <v-layout row wrap class="light-text">
-                      <v-flex xs8 >
+                      <v-flex xs8 sm7 >
                       <v-text-field @input="hasChanged" prepend-icon="location_city" name="streetAddress" label="Street Address"
                                     :disabled="isFormDisabled" v-model="traderCopy.streetAddress" required :rules="[rules.required]"
                        >{{traderCopy.streetAddress}}</v-text-field>
                       </v-flex>
-                      <v-flex xs3 class="ml-3">
+                      <v-flex xs3 class="ml-4">
                         <v-text-field  @input="hasChanged" prepend-icon="store" name="personType" label="Person Type"
                             hint="Classification of person involved"
                             disabled v-model="traderCopy.personType"  required :rules="[rules.required]"
@@ -179,6 +121,7 @@
               </v-card-text>
         <v-card-actions xs12 md6 sm6 offset-sm3 >
               <v-spacer></v-spacer>
+              <!-- <v-btn v-if="hasEditPermission" dark color="orange" @click="doAccountNoEdit">Edit Account No</v-btn> -->
               <v-btn v-if="hasEditPermission" dark color="orange" @click="doEdit">Edit</v-btn>
               <v-btn dark color="orange" @click="doCancel">Cancel</v-btn>
               <v-btn dark color="orange" @click="doSave">Save</v-btn>
@@ -220,6 +163,9 @@ export default {
           snackbartext:'',
           timeoutt:2500,
           traderdbCopy:{},
+          editedItem:{accountNo:'', isActive:false, startDate:(new Date()).toDateString(), endDate:(new Date()).toDateString()},
+          formTitle:"Edit Account Number",
+          dialog:false,
           yposition:true,
           message:"Form has changed. Cancel Edits?",
           heading:"Confirm Cancel",
@@ -248,6 +194,23 @@ export default {
       }
     },
     methods: {
+      doAccountNoEdit(){
+        if(this.traderCopy.accountNumbers && this.traderCopy.accountNumbers.length > 0){
+          this.editedItem = this.traderCopy.accountNumbers.find(acno => acno.isActive === true);
+          if(!this.editedItem) this.editedItem = this.traderCopy.accountNumbers
+              .sort( function(a,b) {
+                  Date.parse(a.startDate) >= Date.parse(b.startDate);
+                } );
+          console.log('Did not find an active account number. Editing old')
+        }
+        else {
+          console.log('creating a new account number')
+          this.editedItem = this.$store.getters['traderModule/newAccountNumber'];
+          this.editedItem.startDate = (new Date()).toISOString().substring(0,10); // YYYY-MM-DD
+          this.editedItem.endDate = (new Date()).toISOString().substring(0,10);
+        }
+        this.dialog = true;
+      },
       showSnackBar(text){
           this.snackbartext = text;
           this.snackbar = true;
@@ -259,6 +222,19 @@ export default {
         this.formIsModified = true
         console.log('trader hasChangedChkBox - formisfmodified=', this.formIsModified)
       },
+      // cancelAccountNoEdit(){
+      //     this.dialog=false;
+      // },
+      //  editAccountNo(editDocument){
+      //     this.editedItem = {...editDocument }; //copy!!!
+      //     this.dialog = true;
+      // },
+      // saveAccountNoEdit(){
+      //   this.dialog = false;
+      //   this.formIsModified = true;
+      //   this.showSnackBar('Account Number has been changed.');
+      // },
+
       doEdit(){
         //If the user does not have the permission to edit then this button is automatically disabled or even invisible.
         this.isFormDisabled = false;

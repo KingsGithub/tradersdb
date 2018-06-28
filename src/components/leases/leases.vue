@@ -36,6 +36,7 @@
               <td class="text-xs-left">{{ props.item.traderName }}</td>
               <td class="text-xs-left">{{ props.item.unitName }}</td>
               <td class="text-xs-left">{{ props.item.occupationStartDate }}</td>
+              <td class="text-xs-left">{{ props.item.endDate }}</td>
               <td class="text-xs-left">{{ props.item.hasNotes }}</td>
               <td class="text-xs-left">{{ props.item.hasPayments }}</td>
               </tr>
@@ -56,6 +57,10 @@
 <script>
 import Lease from './lease';
   export default {
+    props : {
+      traderId:{ type: String, required: false, default: '-LDMAIzfsAsUOAddMlpK'},
+      leaseId: { type: String, required: false, default: '-LDvJcCxj4-gl35cZ26K'}
+    },
     components:{
       appLease:Lease
     },
@@ -82,6 +87,7 @@ import Lease from './lease';
           { text: 'Trader', value: 'traderName' },
           { text: 'Unit No.', value: 'unitName' },
           { text: 'StartDate', value: 'occupationStartDate' },
+          { text: 'EndDate', value: 'endDate'},
           { text: 'Has Notes', value: 'hasNotes'},
           { text: 'Has Payments', value: 'hasPayments'}
         ]
@@ -100,17 +106,19 @@ import Lease from './lease';
           if(stationsLOV) {
               const leases = this.$store.getters['leaseModule/allLeases'];
               leases.forEach( lease => {
-                    stationName = stationsLOV.find( (station) => {return station.id === lease.stationId} ).name;
-                    t = tradersLOV.find( (trader) => {return trader.id === lease.traderId} );
-                    if(t) { traderName = t.firstname + ' ' + t.surname } else traderName = 'Not Found';
-                    let unit = unitsLOV.find( (unit) => {return unit.id === lease.unitId} );
-                    unitName = unit.unitNumber;
+                    if(lease.traderId === this.traderId) {
+                        stationName = stationsLOV.find( (station) => {return station.id === lease.stationId} ).name;
+                        t = tradersLOV.find( (trader) => {return trader.id === lease.traderId} );
+                        if(t) { traderName = t.firstname + ' ' + t.surname } else traderName = 'Not Found';
+                        let unit = unitsLOV.find( (unit) => {return unit.id === lease.unitId} );
+                        unitName = unit.unitNumber;
 
-                    let item = { ...lease, stationName: stationName, traderName: traderName, unitName: unitName }
+                        let item = { ...lease, stationName: stationName, traderName: traderName, unitName: unitName }
 
-                    item.hasNotes = (item.hasNotes) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
-                    item.hasPayments = (item.hasPayments) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
-                    remodeledLeases.push(item);
+                        item.hasNotes = (item.hasNotes) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
+                        item.hasPayments = (item.hasPayments) ? "Yes" : "No"; //change boolean to Yes(true) or No(false).
+                        remodeledLeases.push(item);
+                    }
                 });
               return remodeledLeases;
           }

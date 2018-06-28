@@ -132,6 +132,10 @@ import Dialog from '../shared/dialog'
 export default {
 
    props: ['id'],
+  //  props : {
+  //     traderId:{ type: String, required: false, default: '-LDMAIzfsAsUOAddMlpK'},
+  //     leaseId: { type: String, required: false, default: '-LDvJcCxj4-gl35cZ26K'}
+  //   },
 
    components:{
       appDialog:Dialog

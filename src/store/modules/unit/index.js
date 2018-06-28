@@ -17,7 +17,8 @@ export const unitModule = {
           hasWashbasin:true,
           isVacant:true,
           hasStorage:true,
-          propertyType:"Unit"
+          propertyType:"Unit",
+          accountNumber:''
       },
 
         loadedUnits: [],
@@ -35,7 +36,8 @@ export const unitModule = {
               hasWashbasin:false,
               isVacant:false,
               hasStorage:false,
-              propertyType:"Unit"
+              propertyType:"Unit",
+              accountNumber:''
           }
 
           ]
@@ -112,7 +114,8 @@ export const unitModule = {
                       city :obj[key].city,
                       province :obj[key].province,
                       postalCode :obj[key].postalCode,
-                      propertyType :obj[key].propertyType
+                      propertyType :obj[key].propertyType,
+                      accountNumber:obj[key].accountNumber
                     })
                 };
                 commit('loadUnits',units);

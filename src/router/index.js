@@ -38,6 +38,10 @@ export default new Router({
       children: [
       { path:'/tabs/tabs/tab1/:traderId', name:'trader', component: Trader, props:true },
       { path:'/tabs/tabs/tab2/:traderId', name:'document', component: Documents, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', name:'leases', component: Leases, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', name:'lease', component: Lease, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', name:'units', component: Units, props:true },
+      { path:'/tabs/tabs/tab2/:traderId', name:'unit', component: Unit, props:true },
       { path:'/tabs/tabs/tab3/:traderId', name:'note', component: Notes, props:true },
       { path:'/tabs/tabs/tab4/:traderId', name:'payment', component: Payments, props:true } ,
       { path:'/tabs/tabs/tab5/:traderId', name:'recon', component: Recons, props:true }
